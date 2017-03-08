@@ -1,2 +1,2 @@
 # jbesticon
-Java porting of the @besticon project
+Java porting of the https://github.com/mat/besticon project
