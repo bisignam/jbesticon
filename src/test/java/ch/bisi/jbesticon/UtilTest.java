@@ -7,12 +7,20 @@ import java.net.URL;
 
 import org.junit.Test;
 
+/**
+ * Tests {@link Util} class.
+ */
 public class UtilTest {
 
-	@Test
-	public void getDomain() throws MalformedURLException {
-		String testDomain = "http://adomain.com";
-		URL testUrl = new URL(new URL(testDomain), "/api/");
-		assertEquals(Util.getDomain(testUrl).toString(), testDomain);
-	}
+  /**
+   * Tests {@link Util#getDomain(URL)}.
+   *
+   */
+  @Test
+  public void getDomain() throws MalformedURLException {
+    String testDomain = "http://adomain.com";
+    URL testUrl = new URL(new URL(testDomain), "/api/");
+    assertEquals(Util.getDomain(testUrl).toString(), testDomain);
+  }
+
 }
