@@ -5,5 +5,7 @@
 .checkstyle
 .eclipse-pmd
 *.log
+.idea
+*.iml
 target
 
