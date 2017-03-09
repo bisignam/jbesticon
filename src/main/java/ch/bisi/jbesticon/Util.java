@@ -19,7 +19,7 @@ public class Util {
    * @throws MalformedURLException
    *           in case of problems retrieving the domain
    */
-  public static URL getDomain(URL url) throws MalformedURLException {
+  public static URL getDomain(final URL url) throws MalformedURLException {
     return new URL(url.getProtocol(), url.getHost(), "");
   }
 

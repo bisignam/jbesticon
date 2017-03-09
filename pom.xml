@@ -13,9 +13,32 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
+
   <build>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-pmd-plugin</artifactId>
+          <version>3.7</version>
+          <configuration>
+            <rulesets>
+              <ruleset>${project.basedir}/src/pmd/main-ruleset.xml</ruleset>
+              <ruleset>${project.basedir}/src/pmd/tests-ruleset.xml</ruleset>
+            </rulesets>
+            <printFailingErrors>true</printFailingErrors>
+            <includeTests>true</includeTests>
+          </configuration>
+        </plugin>
         <plugin>
           <groupId>org.eclipse.m2e</groupId>
           <artifactId>lifecycle-mapping</artifactId>
@@ -63,7 +86,7 @@
         <version>2.17</version>
         <executions>
           <execution>
-            <id>validate</id>
+            <id>checkstyle-check</id>
             <phase>validate</phase>
             <configuration>
               <configLocation>google_checks.xml</configLocation>
@@ -81,10 +104,9 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
-        <version>3.7</version>
         <executions>
           <execution>
-            <id>validate</id>
+            <id>pmd-cpd-check</id>
             <phase>validate</phase>
             <goals>
               <goal>check</goal>

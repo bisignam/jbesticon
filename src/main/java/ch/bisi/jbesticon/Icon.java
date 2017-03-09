@@ -23,7 +23,8 @@ public class Icon {
    * @param data
    *          the byte array representing image's data.
    */
-  public Icon(String url, int width, int height, Format format, byte[] data) {
+  public Icon(final String url, final int width, final int height, final Format format,
+      final byte[] data) {
     super();
     this.url = url;
     this.width = width;
@@ -47,7 +48,7 @@ public class Icon {
    * @param url
    *          the new url
    */
-  public void setUrl(String url) {
+  public void setUrl(final String url) {
     this.url = url;
   }
 
@@ -66,7 +67,7 @@ public class Icon {
    * @param width
    *          the new width
    */
-  public void setWidth(int width) {
+  public void setWidth(final int width) {
     this.width = width;
   }
 
@@ -85,7 +86,7 @@ public class Icon {
    * @param height
    *          the new height
    */
-  public void setHeight(int height) {
+  public void setHeight(final int height) {
     this.height = height;
   }
 
@@ -104,7 +105,7 @@ public class Icon {
    * @param format
    *          the new format
    */
-  public void setFormat(Format format) {
+  public void setFormat(final Format format) {
     this.format = format;
   }
 
@@ -123,7 +124,7 @@ public class Icon {
    * @param data
    *          the new data
    */
-  public void setData(byte[] data) {
+  public void setData(final byte[] data) {
     this.data = data;
   }
 

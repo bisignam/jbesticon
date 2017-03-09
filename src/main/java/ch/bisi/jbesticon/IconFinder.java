@@ -16,9 +16,8 @@ public class IconFinder {
    * @throws MalformedURLException
    *           in case url is malformed
    */
-  public static List<Icon> getFavicons(URL url) throws MalformedURLException {
-    URL domain = Util.getDomain(url);
-
+  public static List<Icon> getFavicons(final URL url) throws MalformedURLException {
+    final URL domain = Util.getDomain(url);
     return null;
   }
 

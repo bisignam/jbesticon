@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<ruleset name="Jbesticon ruleset" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+  <description>
+    Jbesticon ruleset for everything except tests
+  </description>
+
+  <!-- exclude tests -->
+  <exclude-pattern>.*src/test/java/.*</exclude-pattern>
+  
+  <rule ref="rulesets/java/basic.xml" />
+  <rule ref="rulesets/java/strings.xml" />
+  <rule ref="rulesets/java/unusedcode.xml" />
+  <rule ref="rulesets/java/braces.xml" />
+  <rule ref="rulesets/java/imports.xml" />
+  <rule ref="rulesets/java/coupling.xml" >
+    <exclude name="LoosePackageCoupling"/>
+  </rule>
+  <rule ref="rulesets/java/typeresolution.xml" >
+    <exclude name="UnusedImports"/>
+  </rule>
+  <rule ref="rulesets/java/strictexception.xml" />
+  <rule ref="rulesets/java/optimizations.xml" />
+
+  <rule ref="rulesets/java/empty.xml">
+    <exclude name="EmptyCatchBlock" />
+  </rule>
+
+  <rule ref="rulesets/java/empty.xml/EmptyCatchBlock" message="Must handle exceptions">
+    <priority>2</priority>
+  </rule>
+
+  <rule ref="rulesets/java/codesize.xml/ExcessiveMethodLength" />
+  <rule ref="rulesets/java/codesize.xml/ExcessiveParameterList" />
+  <rule ref="rulesets/java/codesize.xml/ExcessiveClassLength" />
+  <rule ref="rulesets/java/codesize.xml/ExcessivePublicCount" />
+  <rule ref="rulesets/java/codesize.xml/TooManyFields" />
+
+  <rule ref="rulesets/java/codesize.xml/CyclomaticComplexity">
+    <properties>
+      <property name="reportLevel" value="5" />
+    </properties>
+  </rule>
+
+  <rule ref="rulesets/java/design.xml/UseCollectionIsEmpty" />
+  <rule ref="rulesets/java/design.xml/PreserveStackTrace" />
+  <rule ref="rulesets/java/design.xml/GodClass" />
+  <rule ref="rulesets/java/design.xml/UnnecessaryLocalBeforeReturn" />
+
+
+</ruleset>

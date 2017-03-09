@@ -3,6 +3,7 @@
 .settings
 .classpath
 .checkstyle
+.eclipse-pmd
 *.log
 target
 
