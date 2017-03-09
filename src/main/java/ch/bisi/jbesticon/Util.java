@@ -6,7 +6,7 @@ import java.net.URL;
 public class Util {
 
   private Util() {
-    // hide public constructor
+     // hide public constructor
   }
 
   /**

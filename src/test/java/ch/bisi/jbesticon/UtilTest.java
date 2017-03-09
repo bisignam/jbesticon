@@ -11,7 +11,6 @@ import org.junit.Test;
  * Tests {@link Util} class.
  */
 public class UtilTest {
-
   /**
    * Tests {@link Util#getDomain(URL)}.
    *

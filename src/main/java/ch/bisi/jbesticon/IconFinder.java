@@ -2,6 +2,7 @@ package ch.bisi.jbesticon;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 
 public class IconFinder {
@@ -17,8 +18,7 @@ public class IconFinder {
    *           in case url is malformed
    */
   public static List<Icon> getFavicons(final URL url) throws MalformedURLException {
-    final URL domain = Util.getDomain(url);
-    return null;
+    return Collections.emptyList();
   }
 
 }
