@@ -1,4 +1,4 @@
-package ch.bisi.jbesticon;
+package ch.bisi.jbesticon.common;
 
 /**
  * Possible {@link Icon}s formats.

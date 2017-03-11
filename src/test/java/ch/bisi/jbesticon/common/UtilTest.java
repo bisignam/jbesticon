@@ -1,11 +1,12 @@
-package ch.bisi.jbesticon;
+package ch.bisi.jbesticon.common;
 
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.junit.Test;
 
 /**
  * Tests {@link Util} class.
@@ -19,7 +20,7 @@ public class UtilTest {
   public void getDomain() throws MalformedURLException {
     final String testDomain = "http://adomain.com";
     final URL testUrl = new URL(new URL(testDomain), "/api/");
-    assertEquals(Util.getDomain(testUrl).toString(), testDomain);
+    assertEquals(Util.getDomain(testUrl), testDomain);
   }
 
 }

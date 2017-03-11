@@ -1,11 +1,12 @@
-package ch.bisi.jbesticon;
+package ch.bisi.jbesticon.common;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * Class representing an Icon.
  **/
-@SuppressFBWarnings({ "EI_EXPOSE_REP", "EI_EXPOSE_REP2" }) public class Icon {
+@SuppressFBWarnings({ "EI_EXPOSE_REP", "EI_EXPOSE_REP2" })
+public class Icon {
 
   private String url;
   private int width;
@@ -23,7 +24,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
    * @param data   the byte array representing image's data.
    */
   public Icon(final String url, final int width, final int height, final Format format,
-      final byte[] data) {
+               final byte[] data) {
     super();
     this.url = url;
     this.width = width;

@@ -1,4 +1,6 @@
-package ch.bisi.jbesticon;
+package ch.bisi.jbesticon.finder;
+
+import ch.bisi.jbesticon.common.Icon;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -18,7 +20,16 @@ public class IconFinder {
    *           in case url is malformed
    */
   public static List<Icon> getFavicons(final URL url) throws MalformedURLException {
+    //String domainUrl = Util.getDomain(url);
+
+    //Document doc = Jsoup.connect(domainUrl).get();
+    //Element link = doc.select("a").first();
+    //String relHref = link.attr("href"); // == "/"
+    //String absHref = link.attr("abs:href"); // "http://jsoup.org/"
+
     return Collections.emptyList();
   }
+
+
 
 }
