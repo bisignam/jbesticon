@@ -22,24 +22,24 @@ public class FaviconsLinksFetcher {
 
   // @formatter:off
   private static final List<String> commonFaviconsPaths = Arrays.asList(
-              "favicon.ico",
-              "apple-touch-icon.png",
-              "apple-touch-icon-precomposed.png"
+      "favicon.ico",
+      "apple-touch-icon.png",
+      "apple-touch-icon-precomposed.png"
   );
 
   private static final List<String> faviconsCssSelectors = Arrays.asList(
-              "link[rel='icon']",
-              "link[rel='shortcut icon']",
-              "link[rel='apple-touch-icon']",
-              "link[rel='apple-touch-icon-precomposed']"
+      "link[rel='icon']",
+      "link[rel='shortcut icon']",
+      "link[rel='apple-touch-icon']",
+      "link[rel='apple-touch-icon-precomposed']"
   );
   // @formatter:on
 
   /**
    * Instantiates a new {@link FaviconsLinksFetcher}.
    *
-   * @param document the html {@link Document} from which to extract icons links, cannot be
-   *                 {@code null}
+   * @param document the html {@link Document} from which to extract icons links, cannot be {@code
+   * null}
    */
   FaviconsLinksFetcher(final Document document) {
     this.domainDocument = document;
@@ -103,7 +103,7 @@ public class FaviconsLinksFetcher {
    * @throws MalformedURLException in case of problems building the favicons common {@link URL}s.
    */
   private static List<URL> extractCommonFaviconsUrls(final URL baseUrl)
-    throws MalformedURLException {
+      throws MalformedURLException {
     final List<URL> commonFaviconsPaths = new ArrayList<>();
     for (final String faviconPath : FaviconsLinksFetcher.commonFaviconsPaths) {
       commonFaviconsPaths.add(new URL(baseUrl, faviconPath));
@@ -114,17 +114,17 @@ public class FaviconsLinksFetcher {
   /**
    * Extracts href values of commons {@code <link>} elements referring to favicons.
    *
-   * @param baseUrl  the base {@link URL} for the given {@link Document}
+   * @param baseUrl the base {@link URL} for the given {@link Document}
    * @param document the html {@link Document} to scan
    * @return the list of found favicons {@link URL}s
    * @throws MalformedURLException in case the urls read from the html {@link Document} are
-   *                               malformed
+   *         malformed
    */
   private List<URL> extractFaviconsUrlsFromCssSelectors(final URL baseUrl, final Document document)
-    throws MalformedURLException {
+      throws MalformedURLException {
     final List<URL> result = new ArrayList<>();
     for (final String cssSelector : faviconsCssSelectors) {
-      for (final Element el: document.select(cssSelector)) {
+      for (final Element el : document.select(cssSelector)) {
         result.add(new URL(baseUrl, el.attr("href")));
       }
     }

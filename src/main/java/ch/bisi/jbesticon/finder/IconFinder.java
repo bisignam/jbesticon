@@ -11,13 +11,10 @@ public class IconFinder {
 
   /**
    * Gets the list of favicons for the given {@link URL}.
-   * 
-   * @param url
-   *          the url from which to extract favicons.
-   * 
+   *
+   * @param url the url from which to extract favicons.
    * @return the list of {@link Icon} representing found favicons.
-   * @throws MalformedURLException
-   *           in case url is malformed
+   * @throws MalformedURLException in case url is malformed
    */
   public static List<Icon> getFavicons(final URL url) throws MalformedURLException {
     //String domainUrl = Util.getDomain(url);
@@ -29,7 +26,6 @@ public class IconFinder {
 
     return Collections.emptyList();
   }
-
 
 
 }

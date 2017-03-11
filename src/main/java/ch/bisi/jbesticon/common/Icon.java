@@ -5,7 +5,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 /**
  * Class representing an Icon.
  **/
-@SuppressFBWarnings({ "EI_EXPOSE_REP", "EI_EXPOSE_REP2" })
+@SuppressFBWarnings({"EI_EXPOSE_REP", "EI_EXPOSE_REP2"})
 public class Icon {
 
   private String url;
@@ -17,14 +17,14 @@ public class Icon {
   /**
    * Instantiates a new icon.
    *
-   * @param url    the url of the icon
-   * @param width  the width expressed in pixels
+   * @param url the url of the icon
+   * @param width the width expressed in pixels
    * @param height the height expressed in pixels
    * @param format the format
-   * @param data   the byte array representing image's data.
+   * @param data the byte array representing image's data.
    */
   public Icon(final String url, final int width, final int height, final Format format,
-               final byte[] data) {
+      final byte[] data) {
     super();
     this.url = url;
     this.width = width;

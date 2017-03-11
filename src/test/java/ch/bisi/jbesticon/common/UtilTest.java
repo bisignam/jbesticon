@@ -12,9 +12,9 @@ import java.net.URL;
  * Tests {@link Util} class.
  */
 public class UtilTest {
+
   /**
    * Tests {@link Util#getDomain(URL)}.
-   *
    */
   @Test
   public void getDomain() throws MalformedURLException {
