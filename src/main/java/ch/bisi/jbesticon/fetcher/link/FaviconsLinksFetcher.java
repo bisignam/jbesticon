@@ -1,7 +1,9 @@
-package ch.bisi.jbesticon.fetcher;
+package ch.bisi.jbesticon.fetcher.link;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -10,20 +12,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 /**
- * Component for retrieving the list of favicons links.
+ * Component for retrieving the list of favicons links from an html {@link Document}.
  */
-public class FaviconsLinksFetcher {
+public class FaviconsLinksFetcher implements LinksFetcher {
+
+  private static final Logger logger = LoggerFactory.getLogger(FaviconsLinksFetcher.class);
 
   /**
-   * The document from which favicons links are extracted.
+   * The document from which favicons link are extracted.
    **/
   private Document domainDocument;
 
   // @formatter:off
   private static final List<String> commonFaviconsPaths = Arrays.asList(
+      // legacy way of adding favicon by simply serving /favicon.ico
       "favicon.ico",
+      // no HTML way of adding an animated favicon for apple touch devices
       "apple-touch-icon.png",
+      // no HTML way of adding a non animated favicon for apple touch devices
       "apple-touch-icon-precomposed.png"
   );
 
@@ -38,20 +46,21 @@ public class FaviconsLinksFetcher {
   /**
    * Instantiates a new {@link FaviconsLinksFetcher}.
    *
-   * @param document the html {@link Document} from which to extract icons links, cannot be {@code
+   * @param document the html {@link Document} from which to extract icon link, cannot be {@code
    * null}
    */
-  FaviconsLinksFetcher(final Document document) {
+  public FaviconsLinksFetcher(final Document document) {
     this.domainDocument = document;
   }
 
   /**
-   * Gets all the favicons links, both the common ones and the found tags for the specific domain.
+   * Gets all the favicons link, both the common ones and the found tags for the specific domain.
    *
    * @return the {@link List} of {@link URL}
    * @throws IOException in case of problems accessing the html
    */
-  List<URL> getLinks() throws IOException {
+  @Override
+  public List<URL> fetchLinks() throws IOException {
     final List<URL> faviconsLinks = new ArrayList<>();
     final URL baseUrl = extractBaseUrl(domainDocument);
     faviconsLinks.addAll(extractCommonFaviconsUrls(baseUrl));
@@ -90,7 +99,9 @@ public class FaviconsLinksFetcher {
   private URL extractBaseUrl(final Document document) throws MalformedURLException {
     final Element baseHref = document.select("head base[href]").first();
     if (baseHref != null) {
-      return new URL(new URL(domainDocument.location()), baseHref.attr("href"));
+      final String baseHrefValue = baseHref.attr("href");
+      logger.debug("<base> tag found with href: {}", baseHrefValue);
+      return new URL(new URL(domainDocument.location()), baseHrefValue);
     }
     return new URL(domainDocument.location());
   }
@@ -106,6 +117,7 @@ public class FaviconsLinksFetcher {
       throws MalformedURLException {
     final List<URL> commonFaviconsPaths = new ArrayList<>();
     for (final String faviconPath : FaviconsLinksFetcher.commonFaviconsPaths) {
+      logger.debug("Common favicon path {} added", faviconPath);
       commonFaviconsPaths.add(new URL(baseUrl, faviconPath));
     }
     return commonFaviconsPaths;
@@ -125,18 +137,21 @@ public class FaviconsLinksFetcher {
     final List<URL> result = new ArrayList<>();
     for (final String cssSelector : faviconsCssSelectors) {
       for (final Element el : document.select(cssSelector)) {
-        result.add(new URL(baseUrl, el.attr("href")));
+        final String hrefValue = el.attr("href");
+        logger.debug("Favicon href found: {}", hrefValue);
+        result.add(new URL(baseUrl, hrefValue));
       }
     }
     return result;
   }
 
   /**
-   * Gets the {@link Document} from which favicons links are extracted.
+   * Gets the {@link Document} from which favicons link are extracted.
    *
    * @return the {@link Document}
    */
   public Document getDomainDocument() {
     return this.domainDocument;
   }
+
 }
