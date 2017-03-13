@@ -1,7 +1,13 @@
 package ch.bisi.jbesticon;
 
+import static ch.bisi.jbesticon.common.Util.getExtension;
 import static org.junit.Assert.assertEquals;
 
+import net.sf.image4j.codec.bmp.BMPDecoder;
+import net.sf.image4j.codec.ico.ICODecoder;
+
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -10,6 +16,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import javax.imageio.ImageIO;
 
 /**
  * Tests utils.
@@ -84,6 +91,28 @@ public class TestUtil {
    */
   public static URL getResourceUrl(final String resourcePath) {
     return ClassLoader.class.getResource(resourcePath);
+  }
+
+  /**
+   * Gets a {@link BufferedImage} starting from the path of a local resource.
+   *
+   * @param resourcePath the path of an image file residing on the classpath
+   * @return the {@link BufferedImage}
+   */
+  public static BufferedImage getImage(final String resourcePath) throws IOException {
+    URL url = getResourceUrl(resourcePath);
+    String extension = getExtension(url.toString());
+    switch (extension) {
+      case "ico": {
+        return ICODecoder.read(url.openStream()).get(0);
+      }
+      case "bmp": {
+        return BMPDecoder.read(url.openStream());
+      }
+      default: {
+        return ImageIO.read(url);
+      }
+    }
   }
 
 }

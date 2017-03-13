@@ -17,6 +17,7 @@
   <rule ref="rulesets/java/empty.xml"/>
   <rule ref="rulesets/java/junit.xml">
     <exclude name="JUnitAssertionsShouldIncludeMessage"/>
+    <exclude name="JUnitTestContainsTooManyAsserts" />
   </rule>
 
   <rule ref="rulesets/java/codesize.xml/CyclomaticComplexity">
