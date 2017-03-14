@@ -3,7 +3,6 @@ package ch.bisi.jbesticon.colorfinder;
 import static ch.bisi.jbesticon.TestUtil.getImage;
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.awt.Color;
@@ -25,10 +24,9 @@ public class JiconColorFinderTest {
     assertFindsRightColor("black1x1.png", "000000");
   }
 
-  @Ignore
   @Test
   public void testFindColors01() throws IOException, EmptyImageException {
-    assertFindsRightColor("icon01.png", "113671");
+    assertFindsRightColor("icon01.png", "0f2e64");
   }
 
   @Test
@@ -66,7 +64,6 @@ public class JiconColorFinderTest {
     assertFindsRightColor( "icon08.ico", "14e06e");
   }
 
-  @Ignore
   @Test
   public void testFindColors09() throws IOException, EmptyImageException {
     assertFindsRightColor( "icon09.ico", "1c5182");

@@ -16,9 +16,7 @@ import java.util.Optional;
  */
 abstract class ColorFinder {
 
-  /**
-   * If the input image size is over this threshold the algorithm starts undersampling.
-   */
+  /** if the input image size is over this threshold the algorithm starts undersampling. */
   private static final int SAMPLE_THRESHOLD = 180 * 180;
 
   /**
