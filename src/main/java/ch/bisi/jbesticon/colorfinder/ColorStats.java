@@ -23,9 +23,9 @@ class ColorStats {
 
   @Override
   public String toString() {
-    return "ColorStats{" +
-        "count=" + count +
-        ", weight=" + weight +
-        '}';
+    return "ColorStats{"
+        + "count=" + count
+        + ", weight=" + weight
+        + '}';
   }
 }

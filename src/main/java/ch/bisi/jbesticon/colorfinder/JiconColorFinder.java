@@ -20,7 +20,7 @@ public class JiconColorFinder extends ColorFinder {
   }
 
   /**
-   * Implements the {@link ColorFinder} Weighing strategy.
+   * Implements the {@link JiconColorFinder} weighing strategy.
    *
    * @param color the {@link Color}
    * @return the weight of the given {@link Color}.
