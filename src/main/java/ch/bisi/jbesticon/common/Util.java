@@ -10,7 +10,7 @@ public class Util {
   }
 
   /**
-   * Returns the domain of a given {@link URL}. E.g for
+   * Gets the domain of a given {@link URL}. E.g for
    * http://www.youtube.com/hello returns http://www.youtube.com/.
    *
    * @param url the url
@@ -29,10 +29,26 @@ public class Util {
    */
   public static String getExtension(final String path) {
     final int lastPoint = path.lastIndexOf('.');
-    if (lastPoint == -1  || lastPoint == path.length() - 1) {
+    if (lastPoint == -1 || lastPoint == path.length() - 1) {
       return null;
     }
     return path.substring(lastPoint + 1);
   }
+  /**
+   * Given a file name changes the extension with the provided new extension name.
+   *
+   * @param filePath the path of the file
+   * @param newExtension the new extension
+   * @return a new {@link String} with the old extension substituted with {@code newExtension}, the
+   *         original path if no extension name can be extract from the input {@code filePath}
+   */
+  public static String replaceExtension(final String filePath, final String newExtension) {
+    final int lastPointIndex = filePath.lastIndexOf('.');
+    if (lastPointIndex == -1 || lastPointIndex == filePath.length() - 1) {
+      return filePath;
+    }
+    return filePath.substring(0, lastPointIndex + 1 ) + newExtension;
+  }
+
 
 }

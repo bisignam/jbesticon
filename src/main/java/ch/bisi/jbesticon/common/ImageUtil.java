@@ -1,9 +1,13 @@
 package ch.bisi.jbesticon.common;
 
+import static ch.bisi.jbesticon.common.Util.replaceExtension;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -61,6 +65,75 @@ public class ImageUtil {
         reader.dispose();
       }
     }
+  }
+
+  /**
+   * Writes a {@link List} of {@link BufferedImage}s to files.
+   *
+   * @param images the {@link List} of {@link BufferedImage}s to save
+   * @param imagesFormats the {@link List} of formats for each input {@code images}
+   * @param outputFilesPaths the {@link List} of paths where to store each input {@code images}
+   *
+   * @throws IOException in case of problems writing the images to files
+   */
+  public static void writeImagesToFiles(final List<BufferedImage> images,
+                                        final List<String> imagesFormats,
+                                        final List<String> outputFilesPaths) throws IOException {
+    if (!(outputFilesPaths.size() == imagesFormats.size()
+        && imagesFormats.size() == images.size())) {
+      throw new IllegalArgumentException(
+          "All the input lists must have the same length");
+    }
+    for (int j = 0; j < images.size(); j++) {
+      final BufferedImage image = images.get(j);
+      final String imageFormat = imagesFormats.get(j);
+      final String outtputFilePath = outputFilesPaths.get(j);
+      logger.trace("Saving BufferedImage at index {} and format {} in file {}", j,
+          imageFormat, outputFilesPaths.get(j));
+      final boolean write = writeImageToFile(image, imageFormat, outtputFilePath);
+      logger.trace("BufferedImage at index {} write result: {}", j, write);
+    }
+  }
+
+  /**
+   * Writes a {@link BufferedImage} to file.
+   *
+   * @param image the {@link BufferedImage} to save
+   * @param imageFormat the format of the {@link BufferedImage}
+   * @param outputFilePath the path of the file where to write the {@link BufferedImage}
+   * @return {@code true} if the image has been written to file, {@code false} otherwise
+   * @throws IOException in case of problems writing the image to file
+   */
+  private static boolean writeImageToFile(final BufferedImage image,
+      final String imageFormat, final String outputFilePath) throws IOException {
+    final File outputFile = new File(outputFilePath);
+    boolean write;
+    if (imageFormat.equals("ico")) {
+      write = writeIcoDirectoryEntry(image, outputFilePath);
+    } else {
+      write = ImageIO
+          .write(image, imageFormat, outputFile);
+    }
+    return write;
+  }
+
+  /**
+   * Tries to write an image embedded into an .ico file (technically called {@code ICONDIRENTRY})
+   * into its own separate file. Since each {@code ICONDIRENTRY} can represent both a PNG or a BMP
+   * image the method tries to store the embedded image using both formats before returning false.
+   *
+   * @return {@code true} if the image has been written, {@code false} otherwise
+   * @see <a href="http://en.wikipedia.org/wiki/ICO_(icon_image_file_format)">ICO file format
+   * (Wikipedia)</a>
+   */
+  private static boolean writeIcoDirectoryEntry(final BufferedImage image,
+      final String outputFilePath) throws IOException {
+    boolean written = ImageIO
+        .write(image, "png", new File(replaceExtension(outputFilePath, "png")));
+    if (!written) {
+      written = ImageIO.write(image, "bmp", new File(replaceExtension(outputFilePath, "bmp")));
+    }
+    return written;
   }
 
   /**
