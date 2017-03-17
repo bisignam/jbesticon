@@ -1,6 +1,5 @@
 package ch.bisi.jbesticon.common;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
@@ -19,8 +18,7 @@ public class JiconIcon {
    * @param images a {@link List} of {@link JiconIconImage}s embedded in the file at the given
    * {@link URL}.
    */
-  public JiconIcon(final URL url, final List<JiconIconImage> images)
-      throws IOException {
+  public JiconIcon(final URL url, final List<JiconIconImage> images) {
     super();
     this.url = url;
     this.images = images;

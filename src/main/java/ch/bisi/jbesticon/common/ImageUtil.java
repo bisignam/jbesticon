@@ -19,7 +19,7 @@ import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
 /**
- * Utility class for manipulating {@link Image}s.
+ * Utility class for reading and writing {@link Image}s.
  */
 public class ImageUtil {
 
@@ -32,16 +32,17 @@ public class ImageUtil {
   /**
    * Generic method for executing a given operation for each image contained in the file at the
    * given {@link URL}. Results of the executed operations are collected and returned by the
-   * method.
+   * method. Results are ordered as the images embedded in the file at the given {@link URL}.
    *
+   * @param <T> the result of each executed operation
    * @param imageUrl the {@link URL} of the image resource
    * @param operation the {@link ThrowableBiFunction} to execute for each image contained in the
    *        file at the given {@link URL}
-   * @param <T> the result of each executed operation
-   * @return the list of each results returned by the executed operations
+   * @return a {@link List} of {@link T}s containing each result returned by the executed operations
    * @throws ImageFormatNotSupportedException if no registered {@link ImageReader} has been found
    *         for the image at the given {@link URL}
-   * @throws IOException if an error occurs executing the operations
+   * @throws IOException if an error occurs retrieving the {@link ImageReader}
+   *         or executing the input {@code operation}.
    */
   public static <T> List<T> executeOperationForEachEmbeddedImage(final URL imageUrl,
       final ThrowableBiFunction<ImageReader, Integer, T, IOException> operation)
@@ -71,8 +72,9 @@ public class ImageUtil {
    * Writes a {@link List} of {@link BufferedImage}s to files.
    *
    * @param images the {@link List} of {@link BufferedImage}s to save
-   * @param imagesFormats the {@link List} of formats for each input {@code images}
-   * @param outputFilesPaths the {@link List} of paths where to store each input {@code images}
+   * @param imagesFormats the {@link List} of formats for each input {@link BufferedImage}
+   * @param outputFilesPaths the {@link List} of paths where to store each
+   *        input {@link BufferedImage}
    *
    * @throws IOException in case of problems writing the images to files
    */
@@ -87,10 +89,10 @@ public class ImageUtil {
     for (int j = 0; j < images.size(); j++) {
       final BufferedImage image = images.get(j);
       final String imageFormat = imagesFormats.get(j);
-      final String outtputFilePath = outputFilesPaths.get(j);
+      final String outputFilePath = outputFilesPaths.get(j);
       logger.trace("Saving BufferedImage at index {} and format {} in file {}", j,
           imageFormat, outputFilesPaths.get(j));
-      final boolean write = writeImageToFile(image, imageFormat, outtputFilePath);
+      final boolean write = writeImageToFile(image, imageFormat, outputFilePath);
       logger.trace("BufferedImage at index {} write result: {}", j, write);
     }
   }

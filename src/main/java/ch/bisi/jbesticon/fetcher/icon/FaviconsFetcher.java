@@ -29,17 +29,17 @@ public class FaviconsFetcher implements IconsFetcher {
    * Instantiates a new {@link FaviconsFetcher}.
    *
    * @param linksFetcher a {@link LinksFetcher} instance used to retrieve the available favicons
-   *        link
+   *        {@link URL}s
    */
   public FaviconsFetcher(final LinksFetcher linksFetcher) {
     this.linksFetcher = linksFetcher;
   }
 
   /**
-   * Retrieves the {@link Stream} of {@link JiconIcon}s.
+   * Produces a {@link Stream} of {@link JiconIcon}s.
    *
-   * @return the {@link Stream} of {@link JiconIcon}s
-   * @throws IOException in case of problems retrieving the {@link JiconIcon}s
+   * @return a {@link Stream} of {@link JiconIcon}s
+   * @throws IOException in case of problems producing the {@link JiconIcon}s
    */
   @Override
   public Stream<JiconIcon> getIcons() throws IOException {

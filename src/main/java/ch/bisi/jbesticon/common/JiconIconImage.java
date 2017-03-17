@@ -1,7 +1,6 @@
 package ch.bisi.jbesticon.common;
 
 import java.awt.Dimension;
-import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -17,9 +16,9 @@ public class JiconIconImage {
    * Instantiates a new {@link JiconIconImage}.
    * @param imageIndex the image index for this image
    * @param format the format of the image
+   * @param dimension the {@link Dimension} of the image
    */
-  public JiconIconImage(final int imageIndex, final String format, final Dimension dimension)
-      throws IOException {
+  public JiconIconImage(final int imageIndex, final String format, final Dimension dimension) {
     super();
     this.imageIndex = imageIndex;
     this.format = format;

@@ -40,7 +40,9 @@ public class Jicon {
   /**
    * Retrieves all the favicons for the given {@link URL}.
    *
+   * @param url a local or remote {@link URL} of an html document
    * @return all the found favicons as {@link BufferedImage}s
+   * @throws IOException in case of problems retrieving the icons from the given {@link URL}
    */
   public static List<JiconIcon> retrieveAll(final URL url)
       throws IOException {
@@ -55,15 +57,21 @@ public class Jicon {
     return faviconsFetcher.getIcons().collect(Collectors.toList());
   }
 
+  /**
+   * Checks if an {@link URL} is pointing to a local file.
+   *
+   * @param url the {@link URL}
+   * @return true if {@link URL} of local file, false otherwise
+   */
   private static boolean isLocal(final URL url) {
     return url.getHost() == null && url.getProtocol().equals("file");
   }
 
   /**
-   * Saves in a separated file all the images embedded in each input {@link JiconIcon}. The purpose
-   * of this method is to extract multiple images files for those type of formats which embed
-   * multiple images in the same file (see for example ico files). For this reason the number of
-   * files saved may be greater than the number of {@link JiconIcon}s passed as input.
+   * Saves in separated files all the images embedded in each input {@link JiconIcon}.
+   * The purpose of this method is to extract multiple images files for those formats which embed
+   * multiple images in the same file (see for example ico). For this reason the number of
+   * files saved may be greater than the number of {@link JiconIcon}s given as input.
    *
    * <p>
    * The files are saved using the original name of the icon prepended with two indexes
@@ -75,6 +83,7 @@ public class Jicon {
    * For example if the first {@link JiconIcon} in the input {@link List} points to an URL whose
    * file name is favicon.ico and this ico file embeds 4 images, the icon file will be saved
    * as 4 separated files with the following names:
+   * </p>
    *
    * <ul>
    *   <li>0_0favicon.ico</li>
@@ -82,11 +91,12 @@ public class Jicon {
    *   <li>0_2favicon.ico</li>
    *   <li>0_3favicon.ico</li>
    * </ul>
-   * </p>
-   *
    *
    * @param icons the {@link List} of {@link JiconIcon}s to save
-   * @param targetDirPath the directory where to save the files
+   * @param targetDirPath the directory where to save the images files
+   * @throws IOException in case of problems saving the {@link JiconIcon}s
+   * @throws ImageFormatNotSupportedException if the format of some of the input icons
+   *         is not supported
    */
   public static void saveEachEmbeddedImageInDir(final List<JiconIcon> icons,
       final String targetDirPath)
@@ -112,7 +122,7 @@ public class Jicon {
   }
 
   /**
-   * Saves the original file associated to each {@link JiconIcon} in the given directory.
+   * Saves the files associated to each {@link JiconIcon} in the given directory.
    *
    * <p>
    * The files are saved using the original name of the icon prepended with an index indicating
@@ -124,15 +134,16 @@ public class Jicon {
    * For example if the first {@link JiconIcon} in the list points to an URL whose file name
    * is favicon.ico and the second {@link JiconIcon} in the list points to an URL whose file name is
    * also favicon.ico, two files with the following names will be saved:
+   * </p>
    *
    * <ul>
    *   <li>0_favicon.ico</li>
    *   <li>1_favicon.ico</li>
    * </ul>
-   * </p>
    *
    * @param icons the {@link List} of {@link JiconIcon}s to save
-   * @param targetDirPath the directory where to save the files
+   * @param targetDirPath the directory where to save the images files
+   * @throws IOException in case of problems saving the {@link JiconIcon}s
    */
   public static void saveInDir(final List<JiconIcon> icons, final String targetDirPath)
       throws IOException {

@@ -14,14 +14,14 @@ import java.util.List;
 
 
 /**
- * Component for retrieving the list of favicons links from an html {@link Document}.
+ * Component responsible for retrieving favicons {@link URL}s from an html {@link Document}.
  */
 public class FaviconsLinksFetcher implements LinksFetcher {
 
   private static final Logger logger = LoggerFactory.getLogger(FaviconsLinksFetcher.class);
 
   /**
-   * The document from which favicons link are extracted.
+   * The html document from which favicons {@link URL}s are extracted.
    **/
   private Document domainDocument;
 
@@ -46,18 +46,18 @@ public class FaviconsLinksFetcher implements LinksFetcher {
   /**
    * Instantiates a new {@link FaviconsLinksFetcher}.
    *
-   * @param document the html {@link Document} from which to extract icon link, cannot be {@code
-   * null}
+   * @param document the html {@link Document} from which to extract favicons {@link URL}s,
+   *        cannot be {@code null}
    */
   public FaviconsLinksFetcher(final Document document) {
     this.domainDocument = document;
   }
 
   /**
-   * Gets all the favicons link, both the common ones and the found tags for the specific domain.
+   * Gets all the favicons {@link URL}s found in the {@code document}.
    *
    * @return the {@link List} of {@link URL}
-   * @throws IOException in case of problems accessing the html
+   * @throws IOException in case of problems accessing the html {@code document}
    */
   @Override
   public List<URL> fetchLinks() throws IOException {
@@ -107,7 +107,7 @@ public class FaviconsLinksFetcher implements LinksFetcher {
   }
 
   /**
-   * Extracts the common favicons urls from the given html {@link Document}.
+   * Extracts the common favicons {@link URL}s from the given html {@link Document}.
    *
    * @param baseUrl the base {@link URL}.
    * @return the list of common favicons {@link URL}s
@@ -124,12 +124,13 @@ public class FaviconsLinksFetcher implements LinksFetcher {
   }
 
   /**
-   * Extracts href values of commons {@code <link>} elements referring to favicons.
+   * Extracts from the input {@code #document} the href values of {@code <link>} elements
+   * referring to favicons. Values are returned as {@link URL}s.
    *
    * @param baseUrl the base {@link URL} for the given {@link Document}
    * @param document the html {@link Document} to scan
    * @return the list of found favicons {@link URL}s
-   * @throws MalformedURLException in case the urls read from the html {@link Document} are
+   * @throws MalformedURLException in case the {@link URL}s read from the html {@link Document} are
    *         malformed
    */
   private List<URL> extractFaviconsUrlsFromCssSelectors(final URL baseUrl, final Document document)
@@ -146,7 +147,7 @@ public class FaviconsLinksFetcher implements LinksFetcher {
   }
 
   /**
-   * Gets the {@link Document} from which favicons link are extracted.
+   * Gets the html {@link Document} from which favicons {@link URL}s are extracted.
    *
    * @return the {@link Document}
    */
