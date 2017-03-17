@@ -1,6 +1,6 @@
 package ch.bisi.jbesticon.finder;
 
-import ch.bisi.jbesticon.common.Icon;
+import ch.bisi.jbesticon.common.JiconIcon;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,10 +13,10 @@ public class IconFinder {
    * Gets the list of favicons for the given {@link URL}.
    *
    * @param url the url from which to extract favicons.
-   * @return the list of {@link Icon} representing found favicons.
+   * @return the list of {@link JiconIcon} representing found favicons.
    * @throws MalformedURLException in case url is malformed
    */
-  public static List<Icon> getFavicons(final URL url) throws MalformedURLException {
+  public static List<JiconIcon> getFavicons(final URL url) throws MalformedURLException {
     //String domainUrl = Util.getDomain(url);
 
     //Document doc = Jsoup.connect(domainUrl).get();

@@ -4,7 +4,7 @@ import static ch.bisi.jbesticon.TestUtil.getResourceUrl;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-import ch.bisi.jbesticon.common.Icon;
+import ch.bisi.jbesticon.common.JiconIcon;
 import ch.bisi.jbesticon.fetcher.link.LinksFetcher;
 
 import org.junit.Test;
@@ -29,7 +29,7 @@ public class FaviconsFetcherTest {
         Arrays.asList(getResourceUrl("/w3_schools.ico"),
                       new URL("http://www.nonexistent.com/fakepath")));
     FaviconsFetcher faviconsFetcher = new FaviconsFetcher(linksFetcher);
-    List<Icon> retrievedIcons = faviconsFetcher.getIcons();
+    List<JiconIcon> retrievedIcons = faviconsFetcher.getIcons();
     assertEquals(4, retrievedIcons.size());
   }
 

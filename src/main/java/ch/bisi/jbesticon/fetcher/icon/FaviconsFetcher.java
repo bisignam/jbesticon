@@ -2,7 +2,7 @@ package ch.bisi.jbesticon.fetcher.icon;
 
 import static ch.bisi.jbesticon.common.Util.getExtension;
 
-import ch.bisi.jbesticon.common.Icon;
+import ch.bisi.jbesticon.common.JiconIcon;
 import ch.bisi.jbesticon.fetcher.link.LinksFetcher;
 
 import net.sf.image4j.codec.bmp.BMPDecoder;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 
 /**
- * Component responsible for retrieving {@link Icon}s from a {@link LinksFetcher}.
+ * Component responsible for retrieving {@link JiconIcon}s from a {@link LinksFetcher}.
  */
 public class FaviconsFetcher implements IconsFetcher {
 
@@ -38,28 +38,28 @@ public class FaviconsFetcher implements IconsFetcher {
   }
 
   /**
-   * Retrieves the {@link Icon}s.
+   * Retrieves the {@link JiconIcon}s.
    *
-   * @return the {@link List} of {@link Icon}s
-   * @throws IOException in case of problems retrieving the {@link Icon}s
+   * @return the {@link List} of {@link JiconIcon}s
+   * @throws IOException in case of problems retrieving the {@link JiconIcon}s
    */
   @Override
-  public List<Icon> getIcons() throws IOException {
+  public List<JiconIcon> getIcons() throws IOException {
     return linksFetcher.fetchLinks().stream().map(this::getIcons).flatMap(List::stream)
         .collect(Collectors.toList());
   }
 
   /**
-   * Gets a list of {@link Icon}s from a given {@link URL}.
+   * Gets a list of {@link JiconIcon}s from a given {@link URL}.
    *
-   * @param url the {@link URL} from which the {@link Icon}s data are retrieved
-   * @return a {@link List} of {@link Icon}s, an empty {@link List} if no {@link Icon}s could be
+   * @param url the {@link URL} from which the {@link JiconIcon}s data are retrieved
+   * @return a {@link List} of {@link JiconIcon}s, an empty {@link List} if no {@link JiconIcon}s could be
    *         retrieved from the {@link URL}
    */
-  private List<Icon> getIcons(final URL url) {
+  private List<JiconIcon> getIcons(final URL url) {
     try {
       final List<? extends Image> images = getImages(url);
-      return images.stream().map(i -> new Icon(url, i)).collect(Collectors.toList());
+      return images.stream().map(i -> new JiconIcon(url, i)).collect(Collectors.toList());
     } catch (IOException e) {
       logger.warn("No icons found at {}", url, e);
       return Collections.emptyList();
