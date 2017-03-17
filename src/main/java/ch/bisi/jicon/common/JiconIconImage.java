@@ -12,10 +12,11 @@ public class JiconIconImage {
 
   /**
    * Instantiates a new {@link JiconIconImage}.
+   *
    * @param format the format of the image
    * @param dimension the {@link Dimension} of the image
    */
-  public JiconIconImage(final String format, final Dimension dimension) {
+  JiconIconImage(final String format, final Dimension dimension) {
     super();
     this.format = format;
     this.dimension = dimension;

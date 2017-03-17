@@ -1,18 +1,14 @@
 package ch.bisi.jicon.fetcher.icon;
 
-import static ch.bisi.jicon.common.ImageUtil.executeOperationForEachEmbeddedImage;
-
 import ch.bisi.jicon.common.ImageFormatNotSupportedException;
 import ch.bisi.jicon.common.JiconIcon;
-import ch.bisi.jicon.common.JiconIconImage;
+import ch.bisi.jicon.common.JiconIconFactory;
 import ch.bisi.jicon.fetcher.link.LinksFetcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.Dimension;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -56,12 +52,7 @@ public class FaviconsFetcher implements IconsFetcher {
    */
   private Optional<JiconIcon> getIconFromUrl(final URL url) {
     try {
-      final List<JiconIconImage> images = executeOperationForEachEmbeddedImage(url,
-          (reader, index) -> {
-            return new JiconIconImage(reader.getFormatName(),
-                new Dimension(reader.getWidth(index), reader.getHeight(index)));
-          });
-      return Optional.of(new JiconIcon(url, images));
+      return Optional.of(JiconIconFactory.getIcon(url));
     } catch (IOException e) {
       logger.warn("No icons found at {}", url, e);
       return Optional.empty();

@@ -16,9 +16,9 @@ public class JiconIcon {
    *
    * @param url the url of the icon
    * @param images a {@link List} of {@link JiconIconImage}s embedded in the file at the given
-   * {@link URL}.
+   *        {@link URL}.
    */
-  public JiconIcon(final URL url, final List<JiconIconImage> images) {
+  JiconIcon(final URL url, final List<JiconIconImage> images) {
     super();
     this.url = url;
     this.images = images;
