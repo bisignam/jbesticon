@@ -24,7 +24,7 @@
     <pmd-plugin-version>3.7</pmd-plugin-version>
     <junit-version>4.12</junit-version>
     <jsoup-version>1.10.2</jsoup-version>
-    <image4j-version>0.7</image4j-version>
+    <twelvemonkey-version>3.0.2</twelvemonkey-version>
     <mockito-version>1.10.19</mockito-version>
     <slf4j-version>1.7.24</slf4j-version>
     <logback-version>1.2.1</logback-version>
@@ -235,9 +235,9 @@
       <version>${findbugs-version}</version>
     </dependency>
     <dependency>
-      <groupId>org.jclarion</groupId>
-      <artifactId>image4j</artifactId>
-      <version>${image4j-version}</version>
+      <groupId>com.twelvemonkeys.imageio</groupId>
+      <artifactId>imageio-ico</artifactId>
+      <version>${twelvemonkey-version}</version>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>

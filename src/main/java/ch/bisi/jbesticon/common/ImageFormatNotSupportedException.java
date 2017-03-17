@@ -1,9 +1,9 @@
-package ch.bisi.jbesticon.fetcher.icon;
+package ch.bisi.jbesticon.common;
 
 /**
  * Exception indicating that a given image format is not supported.
  */
-class ImageFormatNotSupportedException extends Exception {
+public class ImageFormatNotSupportedException extends Exception {
   ImageFormatNotSupportedException(final String message) {
     super(message);
   }
