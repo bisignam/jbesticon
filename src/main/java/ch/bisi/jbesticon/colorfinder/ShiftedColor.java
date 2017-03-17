@@ -36,15 +36,16 @@ public class ShiftedColor {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
+  @SuppressWarnings("PMD.CyclomaticComplexity")
+  public boolean equals(final Object other) {
+    if (this == other) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (other == null || getClass() != other.getClass()) {
       return false;
     }
 
-    ShiftedColor that = (ShiftedColor) o;
+    final ShiftedColor that = (ShiftedColor) other;
 
     if (shift != that.shift) {
       return false;
@@ -62,9 +63,9 @@ public class ShiftedColor {
 
   @Override
   public String toString() {
-    return "ShiftedColor{" +
-        "shift=" + shift +
-        ", color=" + color +
-        '}';
+    return "ShiftedColor{"
+        + "shift=" + shift
+        + ", color=" + color
+        + '}';
   }
 }
