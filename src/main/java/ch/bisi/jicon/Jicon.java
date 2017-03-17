@@ -64,7 +64,8 @@ public class Jicon {
    * @return true if {@link URL} of local file, false otherwise
    */
   private static boolean isLocal(final URL url) {
-    return url.getHost() == null && url.getProtocol().equals("file");
+    return (url.getHost() == null || url.getHost().equals("") || url.getHost().equals("localhost"))
+        && url.getProtocol().equals("file");
   }
 
   /**
@@ -86,10 +87,10 @@ public class Jicon {
    * </p>
    *
    * <ul>
-   *   <li>0_0favicon.ico</li>
-   *   <li>0_1favicon.ico</li>
-   *   <li>0_2favicon.ico</li>
-   *   <li>0_3favicon.ico</li>
+   *   <li>0_0_favicon.ico</li>
+   *   <li>0_1_favicon.ico</li>
+   *   <li>0_2_favicon.ico</li>
+   *   <li>0_3_favicon.ico</li>
    * </ul>
    *
    * @param icons the {@link List} of {@link JiconIcon}s to save
@@ -115,7 +116,7 @@ public class Jicon {
       final List<String> outputFilesPaths = IntStream.range(0, images.size())
           .mapToObj(
               index -> targetDirPath + File.separator + finalI + "_" + index + "_" + Paths.get(
-                  icons.get(index).getUrl().toString())
+                  icons.get(finalI).getUrl().toString())
                   .getFileName()).collect(Collectors.toList());
       writeImagesToFiles(images, imagesFormats, outputFilesPaths);
     }

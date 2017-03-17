@@ -52,7 +52,7 @@ abstract class ColorFinder {
    * Builds the {@link Color}s statistics map from a {@link BufferedImage}. The created {@link Map}
    * of statics associates to each {@link Color} in the image a {@link ColorStats}. The weight
    * stored in each {@link ColorStats} is computed using the {@link #getWeight(Color)} method. The
-   * method is used to build the initial set of statics given as input to the color finding
+   * method is used to build the set of statistics given as initial input to the color finding
    * algorithm.
    *
    * @param image the {@link BufferedImage} to process
@@ -74,20 +74,23 @@ abstract class ColorFinder {
   /**
    * Executes a step of of the color finding algorithm.
    *
-   * @implSpec Processes a {@link BufferedImage} in the following way:
-   *           <ul>
-   *            <li>Determines the sampling step</li>
-   *            <li>Loop over the {@code image} pixels by using the computed sampling step</li>
-   *            <li>At each sampling step:</li>
-   *            <ul>
-   *              <li>Retrieves the {@link Color} of the processed pixel</li>
-   *              <li>If the retrieved {@link Color} matches the {@code targetColor} or if
-   *                  the {@code targetColor} is {@code null},
-   *                  increases the weight of the given Color</li>
-   *            </ul>
-   *            <li>Inspects the built {@link Map} of weights and
-   *                returns the {@link ShiftedColor} with the maximum weight</li>
-   *           </ul>
+   * <p>Processes a {@link BufferedImage} in the following way:</p>
+   * <ul>
+   *  <li>Determines the sampling step</li>
+   *  <li>Loop over the {@code image} pixels by using the computed sampling step</li>
+   *  <li>At each sampling step:</li>
+   *    <ul>
+   *       <li>Retrieves the {@link Color} of the processed pixel</li>
+   *       <li>
+   *           If the retrieved {@link Color} matches the {@code targetColor} or if the
+   *           {@code targetColor} is {@code null} increases the weight of the given Color
+   *        </li>
+   *     </ul>
+   *  <li>
+   *      Inspects the built {@link Map} of weights ans returns the
+   *      {@link ShiftedColor} with the maximum weight
+   *  </li>
+   * </ul>
    *
    * @param image the {@link BufferedImage} to process
    * @param colorStatsMap the initial set of statistics storing frequency and weight

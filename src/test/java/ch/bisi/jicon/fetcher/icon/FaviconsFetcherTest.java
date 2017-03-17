@@ -1,5 +1,6 @@
 package ch.bisi.jicon.fetcher.icon;
 
+import static ch.bisi.jicon.TestUtil.assertIsW3SchoolsIco;
 import static ch.bisi.jicon.TestUtil.getResourceUrl;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -31,15 +32,7 @@ public class FaviconsFetcherTest {
     FaviconsFetcher faviconsFetcher = new FaviconsFetcher(linksFetcher);
     List<JiconIcon> retrievedIcons = faviconsFetcher.getIcons().collect(Collectors.toList());
     assertEquals(1, retrievedIcons.size());
-    assertEquals(4, retrievedIcons.get(0).getImages().size());
-    assertEquals(retrievedIcons.get(0).getImages().get(0).getWidth(), 64d, 0.01d);
-    assertEquals(retrievedIcons.get(0).getImages().get(0).getHeight(), 64d, 0.01d);
-    assertEquals(retrievedIcons.get(0).getImages().get(1).getWidth(), 32d, 0.01d);
-    assertEquals(retrievedIcons.get(0).getImages().get(1).getHeight(), 32d, 0.01d);
-    assertEquals(retrievedIcons.get(0).getImages().get(2).getWidth(), 24d, 0.01d);
-    assertEquals(retrievedIcons.get(0).getImages().get(2).getHeight(), 24d, 0.01d);
-    assertEquals(retrievedIcons.get(0).getImages().get(3).getWidth(), 16d, 0.01d);
-    assertEquals(retrievedIcons.get(0).getImages().get(3).getHeight(), 16d, 0.01d);
+    assertIsW3SchoolsIco(retrievedIcons.get(0));
   }
 
 }
