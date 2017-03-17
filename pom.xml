@@ -4,12 +4,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>ch.bisi</groupId>
-  <artifactId>jbesticon</artifactId>
+  <artifactId>jicon</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>jbesticon</name>
-  <url>https://github.com/bisignam/jbesticon</url>
+  <name>Jicon</name>
+  <url>https://github.com/bisignam/jicon</url>
 
   <properties>
     <java.version>1.8</java.version>

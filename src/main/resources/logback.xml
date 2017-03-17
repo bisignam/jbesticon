@@ -8,7 +8,7 @@
     </encoder>
   </appender>
 
-  <logger name="com.bisi.jbesticon" level="INFO" additivity="false">
+  <logger name="com.bisi.jicon" level="INFO" additivity="false">
     <appender-ref ref="STDOUT" />
   </logger>
 
