@@ -145,10 +145,9 @@ public class ImageUtil {
    * @param imageUrl the {@link URL} of the file containing the image(s)
    * @param imageStream the {@link ImageInputStream} for reading the image
    * @return an {@link Optional} {@link ImageReader}
-   * @throws IOException in case of problems reading the file
    */
   private static Optional<ImageReader> getImageReader(final URL imageUrl,
-      final ImageInputStream imageStream) throws IOException {
+      final ImageInputStream imageStream) {
     final String extension = Util.getExtension(imageUrl.toString());
     Iterator<ImageReader> imageReaders;
     imageReaders = ImageIO.getImageReaders(imageStream);

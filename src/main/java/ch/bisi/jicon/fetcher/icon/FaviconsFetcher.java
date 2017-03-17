@@ -58,7 +58,7 @@ public class FaviconsFetcher implements IconsFetcher {
     try {
       final List<JiconIconImage> images = executeOperationForEachEmbeddedImage(url,
           (reader, index) -> {
-            return new JiconIconImage(index, reader.getFormatName(),
+            return new JiconIconImage(reader.getFormatName(),
                 new Dimension(reader.getWidth(index), reader.getHeight(index)));
           });
       return Optional.of(new JiconIcon(url, images));

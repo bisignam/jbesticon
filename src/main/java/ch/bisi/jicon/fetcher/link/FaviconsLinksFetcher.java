@@ -23,7 +23,7 @@ public class FaviconsLinksFetcher implements LinksFetcher {
   /**
    * The html document from which favicons {@link URL}s are extracted.
    **/
-  private Document domainDocument;
+  private final Document domainDocument;
 
   // @formatter:off
   private static final List<String> commonFaviconsPaths = Arrays.asList(
@@ -76,16 +76,6 @@ public class FaviconsLinksFetcher implements LinksFetcher {
    */
   List<URL> getTagsUrls() throws MalformedURLException {
     return extractFaviconsUrlsFromCssSelectors(extractBaseUrl(domainDocument), domainDocument);
-  }
-
-  /**
-   * Gets the list of common favicons {@link URL}s.
-   *
-   * @return the list of common favicons {@link URL}s
-   * @throws MalformedURLException in case of problems extracting the {@link URL}s
-   */
-  List<URL> getCommonUrls() throws MalformedURLException {
-    return extractCommonFaviconsUrls(extractBaseUrl(domainDocument));
   }
 
   /**
@@ -144,15 +134,6 @@ public class FaviconsLinksFetcher implements LinksFetcher {
       }
     }
     return result;
-  }
-
-  /**
-   * Gets the html {@link Document} from which favicons {@link URL}s are extracted.
-   *
-   * @return the {@link Document}
-   */
-  public Document getDomainDocument() {
-    return this.domainDocument;
   }
 
 }

@@ -5,10 +5,10 @@ import java.awt.Color;
 /**
  * Class representing a {@link Color} shifted by N pixels.
  */
-public class ShiftedColor {
+class ShiftedColor {
 
-  private int shift;
-  private Color color;
+  private final int shift;
+  private final Color color;
 
   public ShiftedColor(final int shift, final Color color) {
     this.shift = shift;
