@@ -52,7 +52,8 @@ public class JiconTest {
     Jicon.saveInDir(retrievedIcons, retrievedIconsFolder.toString());
     final File retrievedIcon = new File(retrievedIconsFolder, "0_w3_schools.ico");
     final MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-    final byte[] digest = messageDigest.digest(Files.readAllBytes(Paths.get(retrievedIcon.toURI())));
+    final byte[] digest = messageDigest
+        .digest(Files.readAllBytes(Paths.get(retrievedIcon.toURI())));
     assertEquals("4d1579370a6dc54ccb9677e3c5924bbe",
         toHexString(digest));
   }
@@ -66,6 +67,7 @@ public class JiconTest {
 
   /**
    * Transforms a {@code byte} array to its hexadecimal representation.
+   *
    * @param digest the digest to conver
    * @return the {@link String} representing the hexadecimal value of the input digest
    */
