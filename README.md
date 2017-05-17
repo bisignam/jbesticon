@@ -1,6 +1,6 @@
 
 # Jicon
-[![CircleCI](https://circleci.com/gh/bisignam/jicon.svg?style=svg)](https://circleci.com/gh/bisignam/jicon)
+[![CircleCI](https://circleci.com/gh/bisignam/jicon.svg?style=shield)](https://circleci.com/gh/bisignam/jicon)
 [![Coverage Status](https://coveralls.io/repos/github/bisignam/jicon/badge.svg)](https://coveralls.io/github/bisignam/jicon)
 
 A simple Java library for retrieving favicons from websites.
