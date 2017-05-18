@@ -15,7 +15,7 @@ public class JiconColorFinder extends ColorFinder {
    *
    * @param image the {@link BufferedImage} to process
    */
-  JiconColorFinder(final BufferedImage image) {
+  public JiconColorFinder(final BufferedImage image) {
     super(image);
   }
 

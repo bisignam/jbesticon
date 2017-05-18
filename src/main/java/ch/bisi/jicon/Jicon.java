@@ -3,16 +3,16 @@ package ch.bisi.jicon;
 import static ch.bisi.jicon.common.ImageUtil.executeOperationForEachEmbeddedImage;
 import static ch.bisi.jicon.common.ImageUtil.writeImagesToFiles;
 
+import ch.bisi.jicon.colorfinder.EmptyImageException;
+import ch.bisi.jicon.colorfinder.JiconColorFinder;
 import ch.bisi.jicon.common.ImageFormatNotSupportedException;
+import ch.bisi.jicon.common.ImageUtil;
 import ch.bisi.jicon.common.JiconIcon;
 import ch.bisi.jicon.common.Util;
 import ch.bisi.jicon.fetcher.icon.FaviconsFetcher;
 import ch.bisi.jicon.fetcher.link.FaviconsLinksFetcher;
 import ch.bisi.jicon.fetcher.link.LinksFetcher;
-import org.jsoup.Jsoup;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +24,11 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
+import org.jsoup.Jsoup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The core public access point to the Jicon functionality.
@@ -41,7 +45,7 @@ public class Jicon {
    * Retrieves all the favicons for the given {@link URL}.
    *
    * @param url a local or remote {@link URL} of an html document
-   * @return all the found favicons as {@link BufferedImage}s
+   * @return all the found favicons as {@link JiconIcon}s
    * @throws IOException in case of problems retrieving the icons from the given {@link URL}
    */
   public static List<JiconIcon> retrieveAll(final URL url)
@@ -55,6 +59,32 @@ public class Jicon {
     }
     final FaviconsFetcher faviconsFetcher = new FaviconsFetcher(linksFetcher);
     return faviconsFetcher.getIcons().collect(Collectors.toList());
+  }
+
+  /**
+   * Creates a lettericon for the given {@link URL}.
+   *
+   * @param url the URL of the website from which to extract the lettericon.
+   * @param fallbackColor a fallback color in case no favicon can be found for the given {@link
+   * URL}.
+   * @param size the size of the lettericon to create.
+   * @return a {@link BufferedImage} returning the lettericon.
+   * @throws IOException in case of problems retrieving a base favicon from the given {@link URL}.
+   * @throws EmptyImageException in case the extracted favicons are malformed.
+   */
+  public static BufferedImage getLetterIcon(final URL url, final Color fallbackColor,
+      final Integer size) throws IOException, EmptyImageException {
+    final List<JiconIcon> favicons = retrieveAll(url);
+    if (favicons.isEmpty()) {
+      return ImageUtil.createLetterIcon(fallbackColor, Util.getFirstLetter(url), size);
+    }
+    final BufferedImage faviconImage;
+    try (InputStream in = favicons.get(0).getUrl().openStream()) {
+      faviconImage = ImageIO.read(in);
+    }
+    final JiconColorFinder colorFinder = new JiconColorFinder(faviconImage);
+    final Color mainFaviconColor = colorFinder.findMainColor();
+    return ImageUtil.createLetterIcon(mainFaviconColor, Util.getFirstLetter(url), size);
   }
 
   /**
@@ -87,17 +117,17 @@ public class Jicon {
    * </p>
    *
    * <ul>
-   *   <li>0_0_favicon.ico</li>
-   *   <li>0_1_favicon.ico</li>
-   *   <li>0_2_favicon.ico</li>
-   *   <li>0_3_favicon.ico</li>
+   * <li>0_0_favicon.ico</li>
+   * <li>0_1_favicon.ico</li>
+   * <li>0_2_favicon.ico</li>
+   * <li>0_3_favicon.ico</li>
    * </ul>
    *
    * @param icons the {@link List} of {@link JiconIcon}s to save
    * @param targetDirPath the directory where to save the images files
    * @throws IOException in case of problems saving the {@link JiconIcon}s
-   * @throws ImageFormatNotSupportedException if the format of some of the input icons
-   *         is not supported
+   * @throws ImageFormatNotSupportedException if the format of some of the input icons is not
+   *         supported
    */
   public static void saveEachEmbeddedImageInDir(final List<JiconIcon> icons,
       final String targetDirPath)
@@ -138,8 +168,8 @@ public class Jicon {
    * </p>
    *
    * <ul>
-   *   <li>0_favicon.ico</li>
-   *   <li>1_favicon.ico</li>
+   * <li>0_favicon.ico</li>
+   * <li>1_favicon.ico</li>
    * </ul>
    *
    * @param icons the {@link List} of {@link JiconIcon}s to save

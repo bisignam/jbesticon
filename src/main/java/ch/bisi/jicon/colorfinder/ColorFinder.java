@@ -38,7 +38,7 @@ abstract class ColorFinder {
    *
    * @return the main {@link Color} of the image
    */
-  Color findMainColor() throws EmptyImageException {
+  public Color findMainColor() throws EmptyImageException {
     final Map<Color, ColorStats> colorStatsMap = buildColorMap(image);
     ShiftedColor result = findMainColorStep(image, colorStatsMap, 6, null);
     result = findMainColorStep(image, colorStatsMap, 4, result);

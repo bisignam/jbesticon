@@ -23,4 +23,18 @@ public class UtilTest {
     assertEquals(Util.getDomain(testUrl), testDomain);
   }
 
+  @Test
+  public void getFirstLetter() throws Exception {
+    final String testDomain = "http://www.adomain.com";
+    final URL testUrl = new URL(new URL(testDomain), "/api/");
+    assertEquals(Util.getFirstLetter(testUrl), 'a');
+  }
+
+  @Test
+  public void getFirstLetterNoWww() throws Exception {
+    final String testDomain = "http://adomain.com";
+    final URL testUrl = new URL(new URL(testDomain), "/api/");
+    assertEquals(Util.getFirstLetter(testUrl), 'a');
+  }
+
 }

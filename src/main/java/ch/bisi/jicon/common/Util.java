@@ -22,6 +22,22 @@ public class Util {
   }
 
   /**
+   * Gets the first letter of the website name.
+   *
+   * @param url the url
+   * @return the {@code char} representing the first letter of the URL host
+   */
+  public static char getFirstLetter(final URL url) {
+    if (url.getHost().startsWith("www.") && url.getHost().length() > 4) {
+      return url.getHost().charAt(4);
+    }
+    if (url.getHost().isEmpty()) {
+      return url.getPath().charAt(0);
+    }
+    return url.getHost().charAt(0);
+  }
+
+  /**
    * Gets the file extension from a given path.
    *
    * @param path the path cannot be {@code null}.
@@ -34,6 +50,7 @@ public class Util {
     }
     return path.substring(lastPoint + 1);
   }
+
   /**
    * Given a file name changes the extension with the provided new extension name.
    *
@@ -47,7 +64,7 @@ public class Util {
     if (lastPointIndex == -1 || lastPointIndex == filePath.length() - 1) {
       return filePath;
     }
-    return filePath.substring(0, lastPointIndex + 1 ) + newExtension;
+    return filePath.substring(0, lastPointIndex + 1) + newExtension;
   }
 
 

@@ -7,6 +7,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import ch.bisi.jicon.common.JiconIcon;
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -14,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.util.List;
+import javax.imageio.ImageIO;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -32,6 +35,23 @@ public class JiconTest {
     final List<JiconIcon> retrievedIcons = getW3SchoolsIco();
     assertEquals(1, retrievedIcons.size());
     assertIsW3SchoolsIco(retrievedIcons.get(0));
+  }
+
+  @Test
+  public void getLetterIcon() throws Exception {
+    final URL localW3SchoolsUrl = getLocalW3SchoolsSiteUrl();
+    final BufferedImage retrievedLetterIcon = Jicon
+        .getLetterIcon(localW3SchoolsUrl, Color.RED, 400);
+    final File retrievedLetterIconFile = temporaryFolder.newFile();
+    ImageIO.write(retrievedLetterIcon, "png", retrievedLetterIconFile);
+    final MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+    final byte[] retrievedLetterIconDigest = messageDigest
+        .digest(Files.readAllBytes(Paths.get(retrievedLetterIconFile.toURI())));
+    final byte[] correctLetterIconDigest = messageDigest
+        .digest(Files
+            .readAllBytes(Paths.get(getResourceUrl("/local_w3schools_lettericon.png").toURI())));
+    assertEquals(toHexString(correctLetterIconDigest),
+        toHexString(retrievedLetterIconDigest));
   }
 
   @Test
@@ -59,16 +79,19 @@ public class JiconTest {
   }
 
   private List<JiconIcon> getW3SchoolsIco() throws IOException {
-    final URL htmlWithIconsUrl = generateCustomHtmlDocument(temporaryFolder.newFile(),
+    return Jicon.retrieveAll(getLocalW3SchoolsSiteUrl());
+  }
+
+  private URL getLocalW3SchoolsSiteUrl() throws IOException {
+    return generateCustomHtmlDocument(temporaryFolder.newFile(),
         getResourceUrl("/").toString(),
         getResourceUrl("/w3_schools.ico").toString(), "", "", "");
-    return Jicon.retrieveAll(htmlWithIconsUrl);
   }
 
   /**
-   * Transforms a {@code byte} array to its hexadecimal representation.
+   * Converts a {@code byte}s array to its hexadecimal representation.
    *
-   * @param digest the digest to conver
+   * @param digest the digest to converts
    * @return the {@link String} representing the hexadecimal value of the input digest
    */
   private String toHexString(final byte[] digest) {
