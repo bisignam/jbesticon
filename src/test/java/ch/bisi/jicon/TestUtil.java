@@ -115,4 +115,19 @@ public class TestUtil {
     return ClassLoader.class.getResource(resourcePath);
   }
 
+
+  /**
+   * Converts a {@code byte}s array to its hexadecimal representation.
+   *
+   * @param digest the digest to converts
+   * @return the {@link String} representing the hexadecimal value of the input digest
+   */
+  public static String toHexString(final byte[] digest) {
+    final StringBuilder sb = new StringBuilder();
+    for (byte b : digest) {
+      sb.append(String.format("%02x", b & 0xff));
+    }
+    return sb.toString();
+  }
+
 }

@@ -2,18 +2,11 @@ package ch.bisi.jicon.common;
 
 import static ch.bisi.jicon.common.Util.replaceExtension;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.font.TextAttribute;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.text.AttributedString;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -33,52 +26,6 @@ public class ImageUtil {
 
   private ImageUtil() {
     //hide public constructor
-  }
-
-  /**
-   * Creates a lettericon with the given attributes.
-   *
-   * @param backgroundColor the background {@link Color} of the lettericon to create.
-   * @param letter the letter to write.
-   * @param size the size of the lettericon.
-   * @return a {@link BufferedImage} representing the lettericon.
-   */
-  public static BufferedImage createLetterIcon(final Color backgroundColor, final char letter,
-      final Integer size) {
-    final BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
-    final Graphics2D graphics = image.createGraphics();
-    graphics.setColor(backgroundColor);
-    graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-        RenderingHints.VALUE_ANTIALIAS_ON);
-    graphics.fill(new Ellipse2D.Float(0, 0, size, size));
-    writeLetter(letter, size, graphics);
-    graphics.dispose();
-    return image;
-  }
-
-  /**
-   * Writes a letter on the given {@link Graphics2D}.
-   *
-   * @param letter the letter to write
-   * @param size the size of the {@link Graphics2D}
-   * @param graphics the {@link Graphics2D} on which to write the letter
-   */
-  private static void writeLetter(final char letter, final Integer size,
-      final Graphics2D graphics) {
-    final float fontSize = 0.6880340f * (float) size;
-    final Font font = new Font("Arial", Font.PLAIN, size).deriveFont(fontSize);
-    graphics.setFont(font);
-    final String letterToWrite = Character.toString(Character.toUpperCase(letter));
-    final AttributedString stringToWrite = new AttributedString(letterToWrite);
-    stringToWrite.addAttribute(TextAttribute.FONT, font);
-    stringToWrite
-        .addAttribute(TextAttribute.FOREGROUND,
-            ColorUtil.getForegroundColor(graphics.getColor()));
-    final int letterXPosition =
-        (size - graphics.getFontMetrics().stringWidth(letterToWrite)) / 2;
-    final float yOffsetFactor = 102.0f / 1024.0f;
-    final int letterYPosition = (int) (yOffsetFactor * (float) (size)) + (int) Math.ceil(fontSize);
-    graphics.drawString(stringToWrite.getIterator(), letterXPosition, letterYPosition);
   }
 
   /**

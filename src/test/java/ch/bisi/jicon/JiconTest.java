@@ -2,15 +2,16 @@ package ch.bisi.jicon;
 
 import static ch.bisi.jicon.TestUtil.assertIsW3SchoolsIco;
 import static ch.bisi.jicon.TestUtil.getResourceUrl;
+import static ch.bisi.jicon.TestUtil.toHexString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import ch.bisi.jicon.common.ImageFormatNotSupportedException;
 import ch.bisi.jicon.common.JiconIcon;
 import ch.bisi.jicon.common.JiconIconFactory;
+import ch.bisi.jicon.common.LetterIcon;
 import ch.bisi.jicon.fetcher.icon.IconsFetcher;
 import java.awt.Color;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -19,7 +20,6 @@ import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.util.List;
 import java.util.stream.Stream;
-import javax.imageio.ImageIO;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -58,18 +58,11 @@ public class JiconTest {
 
   @Test
   public void getLetterIcon() throws Exception {
-    final BufferedImage retrievedLetterIcon = jicon
+    final LetterIcon retrievedLetterIcon = jicon
         .getLetterIcon(w3SchoolsUrl, Color.RED, 100);
-    final File retrievedLetterIconFile = temporaryFolder.newFile();
-    ImageIO.write(retrievedLetterIcon, "png", retrievedLetterIconFile);
-    final MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-    final byte[] retrievedLetterIconDigest = messageDigest
-        .digest(Files.readAllBytes(Paths.get(retrievedLetterIconFile.toURI())));
-    final byte[] correctLetterIconDigest = messageDigest
-        .digest(Files
-            .readAllBytes(Paths.get(getResourceUrl("/w3schools_lettericon.png").toURI())));
-    assertEquals(toHexString(correctLetterIconDigest),
-        toHexString(retrievedLetterIconDigest));
+    assertEquals(new Integer(100), retrievedLetterIcon.getSize());
+    assertEquals('W', retrievedLetterIcon.getLetter());
+    assertEquals(new Color(135,197,64), retrievedLetterIcon.getBackgroundColor());
   }
 
   @Test
@@ -96,20 +89,6 @@ public class JiconTest {
         .digest(Files.readAllBytes(Paths.get(retrievedIcon.toURI())));
     assertEquals("4d1579370a6dc54ccb9677e3c5924bbe",
         toHexString(digest));
-  }
-
-  /**
-   * Converts a {@code byte}s array to its hexadecimal representation.
-   *
-   * @param digest the digest to converts
-   * @return the {@link String} representing the hexadecimal value of the input digest
-   */
-  private String toHexString(final byte[] digest) {
-    final StringBuilder sb = new StringBuilder();
-    for (byte b : digest) {
-      sb.append(String.format("%02x", b & 0xff));
-    }
-    return sb.toString();
   }
 
 

@@ -6,8 +6,8 @@ import static ch.bisi.jicon.common.ImageUtil.writeImagesToFiles;
 import ch.bisi.jicon.colorfinder.EmptyImageException;
 import ch.bisi.jicon.colorfinder.JiconColorFinder;
 import ch.bisi.jicon.common.ImageFormatNotSupportedException;
-import ch.bisi.jicon.common.ImageUtil;
 import ch.bisi.jicon.common.JiconIcon;
+import ch.bisi.jicon.common.LetterIcon;
 import ch.bisi.jicon.common.Util;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -63,21 +63,21 @@ public final class Jicon {
   }
 
   /**
-   * Creates a lettericon for the given {@link URL}.
+   * Creates a {@link LetterIcon} for the given {@link URL}.
    *
    * @param url the URL of the website from which to extract the lettericon.
    * @param fallbackColor a fallback color in case no favicon can be found for the given {@link
    * URL}.
    * @param size the size of the lettericon to create.
-   * @return the lettericon as a {@link BufferedImage}.
+   * @return the lettericon as a {@link LetterIcon}.
    * @throws IOException in case of problems retrieving a base favicon from the given {@link URL}.
    * @throws EmptyImageException in case the extracted favicons are malformed.
    */
-  public BufferedImage getLetterIcon(final URL url, final Color fallbackColor,
+  public LetterIcon getLetterIcon(final URL url, final Color fallbackColor,
       final Integer size) throws IOException, EmptyImageException {
     final List<JiconIcon> favicons = retrieveAll(url);
     if (favicons.isEmpty()) {
-      return ImageUtil.createLetterIcon(fallbackColor, Util.getFirstLetter(url), size);
+      return new LetterIcon(size, Util.getFirstLetter(url), fallbackColor);
     }
     final BufferedImage faviconImage;
     try (InputStream in = favicons.get(0).getUrl().openStream()) {
@@ -85,7 +85,7 @@ public final class Jicon {
     }
     final JiconColorFinder colorFinder = new JiconColorFinder(faviconImage);
     final Color mainFaviconColor = colorFinder.findMainColor();
-    return ImageUtil.createLetterIcon(mainFaviconColor, Util.getFirstLetter(url), size);
+    return new LetterIcon(size, Util.getFirstLetter(url), mainFaviconColor);
   }
 
   /**
