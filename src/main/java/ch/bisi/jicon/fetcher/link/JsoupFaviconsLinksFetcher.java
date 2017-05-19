@@ -1,29 +1,28 @@
 package ch.bisi.jicon.fetcher.link;
 
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Component responsible for retrieving favicons {@link URL}s from an html {@link Document}.
  */
-public class FaviconsLinksFetcher implements LinksFetcher {
+public class JsoupFaviconsLinksFetcher implements LinksFetcher {
 
-  private static final Logger logger = LoggerFactory.getLogger(FaviconsLinksFetcher.class);
+  private static final Logger logger = LoggerFactory.getLogger(JsoupFaviconsLinksFetcher.class);
 
   /**
-   * The html document from which favicons {@link URL}s are extracted.
+   * The {@link Document} from which favicons {@link URL}s are extracted.
    **/
-  private final Document domainDocument;
+  private final Document document;
 
   // @formatter:off
   private static final List<String> commonFaviconsPaths = Arrays.asList(
@@ -44,13 +43,13 @@ public class FaviconsLinksFetcher implements LinksFetcher {
   // @formatter:on
 
   /**
-   * Instantiates a new {@link FaviconsLinksFetcher}.
+   * Instantiates a new {@link JsoupFaviconsLinksFetcher}.
    *
-   * @param document the html {@link Document} from which to extract favicons {@link URL}s,
+   * @param document the {@link Document} from which to extract favicons {@link URL}s,
    *        cannot be {@code null}
    */
-  public FaviconsLinksFetcher(final Document document) {
-    this.domainDocument = document;
+  public JsoupFaviconsLinksFetcher(final Document document) throws IOException {
+    this.document = document;
   }
 
   /**
@@ -62,20 +61,10 @@ public class FaviconsLinksFetcher implements LinksFetcher {
   @Override
   public List<URL> fetchLinks() throws IOException {
     final List<URL> faviconsLinks = new ArrayList<>();
-    final URL baseUrl = extractBaseUrl(domainDocument);
+    final URL baseUrl = extractBaseUrl(document);
     faviconsLinks.addAll(extractCommonFaviconsUrls(baseUrl));
-    faviconsLinks.addAll(extractFaviconsUrlsFromCssSelectors(baseUrl, domainDocument));
+    faviconsLinks.addAll(extractFaviconsUrlsFromCssSelectors(baseUrl, document));
     return faviconsLinks;
-  }
-
-  /**
-   * Gets the favicons tags {@code href} attributes values.
-   *
-   * @return the list of specific favicons tags {@link URL}s
-   * @throws MalformedURLException in case of problems extracting the {@link URL}s
-   */
-  List<URL> getTagsUrls() throws MalformedURLException {
-    return extractFaviconsUrlsFromCssSelectors(extractBaseUrl(domainDocument), domainDocument);
   }
 
   /**
@@ -91,9 +80,9 @@ public class FaviconsLinksFetcher implements LinksFetcher {
     if (baseHref != null) {
       final String baseHrefValue = baseHref.attr("href");
       logger.debug("<base> tag found with href: {}", baseHrefValue);
-      return new URL(new URL(domainDocument.location()), baseHrefValue);
+      return new URL(new URL(document.location()), baseHrefValue);
     }
-    return new URL(domainDocument.location());
+    return new URL(document.location());
   }
 
   /**
@@ -105,12 +94,12 @@ public class FaviconsLinksFetcher implements LinksFetcher {
    */
   private static List<URL> extractCommonFaviconsUrls(final URL baseUrl)
       throws MalformedURLException {
-    final List<URL> commonFaviconsPaths = new ArrayList<>();
-    for (final String faviconPath : FaviconsLinksFetcher.commonFaviconsPaths) {
+    final List<URL> result = new ArrayList<>();
+    for (final String faviconPath : commonFaviconsPaths) {
       logger.debug("Common favicon path {} added", faviconPath);
-      commonFaviconsPaths.add(new URL(baseUrl, faviconPath));
+      result.add(new URL(baseUrl, faviconPath));
     }
-    return commonFaviconsPaths;
+    return result;
   }
 
   /**

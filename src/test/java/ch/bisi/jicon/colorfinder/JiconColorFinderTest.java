@@ -5,13 +5,12 @@ import static org.junit.Assert.assertEquals;
 
 import ch.bisi.jicon.TestUtil;
 import ch.bisi.jicon.common.ImageFormatNotSupportedException;
-import org.junit.Test;
-
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Comparator;
 import javax.imageio.ImageReader;
+import org.junit.Test;
 
 /**
  * Tests {@link JiconColorFinder}.

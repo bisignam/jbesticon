@@ -9,9 +9,6 @@ import ch.bisi.jicon.common.ImageFormatNotSupportedException;
 import ch.bisi.jicon.common.ImageUtil;
 import ch.bisi.jicon.common.JiconIcon;
 import ch.bisi.jicon.common.Util;
-import ch.bisi.jicon.fetcher.icon.FaviconsFetcher;
-import ch.bisi.jicon.fetcher.link.FaviconsLinksFetcher;
-import ch.bisi.jicon.fetcher.link.LinksFetcher;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -26,39 +23,43 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
-import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * The core public access point to the Jicon functionality.
  */
-public class Jicon {
+public final class Jicon {
 
   private static final Logger logger = LoggerFactory.getLogger(Jicon.class);
 
-  private Jicon() {
-    // hide public constructor
+  private final FaviconsFetchingStrategy faviconsFetchingStrategy;
+
+  /**
+   * Constructor which build a new {@link Jicon} instance using the default
+   * {@link JsoupFaviconsFetchingStrategy}.
+   */
+  public Jicon() {
+    this.faviconsFetchingStrategy = new JsoupFaviconsFetchingStrategy();
+  }
+
+  /**
+   * Constructor which allows to specify a {@link FaviconsFetchingStrategy}.
+   * @param faviconsFetchingStrategy the favicons fetching strategy
+   */
+  public Jicon(final FaviconsFetchingStrategy faviconsFetchingStrategy) {
+    this.faviconsFetchingStrategy = faviconsFetchingStrategy;
   }
 
   /**
    * Retrieves all the favicons for the given {@link URL}.
    *
-   * @param url a local or remote {@link URL} of an html document
+   * @param url the URL of an HTML document
    * @return all the found favicons as {@link JiconIcon}s
    * @throws IOException in case of problems retrieving the icons from the given {@link URL}
    */
-  public static List<JiconIcon> retrieveAll(final URL url)
-      throws IOException {
-    final String domain = Util.getDomain(url);
-    final LinksFetcher linksFetcher;
-    if (isLocal(url)) {
-      linksFetcher = new FaviconsLinksFetcher(Jsoup.parse(url.openStream(), "UTF-8", domain));
-    } else {
-      linksFetcher = new FaviconsLinksFetcher(Jsoup.connect(domain).get());
-    }
-    final FaviconsFetcher faviconsFetcher = new FaviconsFetcher(linksFetcher);
-    return faviconsFetcher.getIcons().collect(Collectors.toList());
+  public List<JiconIcon> retrieveAll(final URL url) throws IOException {
+    return faviconsFetchingStrategy.getFaviconsFetcher(url).getIcons().collect(Collectors.toList());
   }
 
   /**
@@ -68,11 +69,11 @@ public class Jicon {
    * @param fallbackColor a fallback color in case no favicon can be found for the given {@link
    * URL}.
    * @param size the size of the lettericon to create.
-   * @return a {@link BufferedImage} returning the lettericon.
+   * @return the lettericon as a {@link BufferedImage}.
    * @throws IOException in case of problems retrieving a base favicon from the given {@link URL}.
    * @throws EmptyImageException in case the extracted favicons are malformed.
    */
-  public static BufferedImage getLetterIcon(final URL url, final Color fallbackColor,
+  public BufferedImage getLetterIcon(final URL url, final Color fallbackColor,
       final Integer size) throws IOException, EmptyImageException {
     final List<JiconIcon> favicons = retrieveAll(url);
     if (favicons.isEmpty()) {
@@ -85,17 +86,6 @@ public class Jicon {
     final JiconColorFinder colorFinder = new JiconColorFinder(faviconImage);
     final Color mainFaviconColor = colorFinder.findMainColor();
     return ImageUtil.createLetterIcon(mainFaviconColor, Util.getFirstLetter(url), size);
-  }
-
-  /**
-   * Checks if an {@link URL} is pointing to a local file.
-   *
-   * @param url the {@link URL}
-   * @return true if {@link URL} of local file, false otherwise
-   */
-  private static boolean isLocal(final URL url) {
-    return (url.getHost() == null || url.getHost().equals("") || url.getHost().equals("localhost"))
-        && url.getProtocol().equals("file");
   }
 
   /**
@@ -129,7 +119,7 @@ public class Jicon {
    * @throws ImageFormatNotSupportedException if the format of some of the input icons is not
    *         supported
    */
-  public static void saveEachEmbeddedImageInDir(final List<JiconIcon> icons,
+  public void saveEachEmbeddedImageInDir(final List<JiconIcon> icons,
       final String targetDirPath)
       throws IOException, ImageFormatNotSupportedException {
     if (!Files.isDirectory(Paths.get(targetDirPath))) {
@@ -176,7 +166,7 @@ public class Jicon {
    * @param targetDirPath the directory where to save the images files
    * @throws IOException in case of problems saving the {@link JiconIcon}s
    */
-  public static void saveInDir(final List<JiconIcon> icons, final String targetDirPath)
+  public void saveInDir(final List<JiconIcon> icons, final String targetDirPath)
       throws IOException {
     if (!Files.isDirectory(Paths.get(targetDirPath))) {
       throw new NotDirectoryException(targetDirPath);

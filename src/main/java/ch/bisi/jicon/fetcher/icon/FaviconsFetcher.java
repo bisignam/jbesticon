@@ -4,13 +4,12 @@ import ch.bisi.jicon.common.ImageFormatNotSupportedException;
 import ch.bisi.jicon.common.JiconIcon;
 import ch.bisi.jicon.common.JiconIconFactory;
 import ch.bisi.jicon.fetcher.link.LinksFetcher;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Component responsible for retrieving {@link JiconIcon}s from a {@link LinksFetcher}.

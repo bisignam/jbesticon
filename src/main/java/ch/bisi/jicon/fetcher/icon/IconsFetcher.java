@@ -1,7 +1,6 @@
 package ch.bisi.jicon.fetcher.icon;
 
 import ch.bisi.jicon.common.JiconIcon;
-
 import java.io.IOException;
 import java.util.stream.Stream;
 

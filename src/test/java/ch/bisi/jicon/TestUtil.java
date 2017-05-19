@@ -3,21 +3,12 @@ package ch.bisi.jicon;
 import static org.junit.Assert.assertEquals;
 
 import ch.bisi.jicon.common.JiconIcon;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -26,50 +17,20 @@ import java.util.stream.IntStream;
  */
 public class TestUtil {
 
-  /**
-   * Placeholder to substitute for setting the {@code base} tag when generating a custom html
-   * document.
-   */
-  private static final String BASE_PLACEHOLDER = "${base}";
-
-  /**
-   * Placeholder to substitute for setting the href value of the {@code icon} {@code
-   * <link>} when generating a custom html document.
-   */
-  private static final String ICON_PLACEHOLDER = "${icon}";
-
-  /**
-   * Placeholder to substitute for setting the href value of the {@code shortcut icon} {@code
-   * <link>} when generating a custom html document.
-   */
-  private static final String SHORTCUT_ICON_PLACEHOLDER = "${shortcut_icon}";
-
-  /**
-   * Placeholder to substitute for setting the href value of the {@code apple-touch-icon} {@code
-   * <link>} when generating a custom html document.
-   */
-  private static final String APPLE_TOUCH_PLACEHOLDER = "${apple_touch_icon}";
-
-  /**
-   * Placeholder to substitute for setting the href value of the {@code
-   * apple-touch-icon-precomposed} {@code <link>} when generating a custom html document.
-   */
-  private static final String APPLE_TOUCH_PRECOMPOSED_PLACEHOLDER
-      = "${apple_touch_icon_precomposed}";
-
-  private TestUtil(){
+  private TestUtil() {
     // hide public constructor
   }
 
   /**
-   * Asserts that a given {@link List}  of {@link URL}s contains only the given paths.
+   * Asserts that a given {@link List} of {@link URL}s contains only the given paths.
+   *
    * @param urls the {@link URL}s to check
    * @param domain the base domain of the {@code paths}
    * @param paths an array of paths relative to the {@code domain}
    */
   public static void assertUrlsContainPaths(List<URL> urls, String domain, String... paths) {
     assertContainSameElements(urls, buildUrlsList(domain, paths),
-        Comparator.comparing(URL::getPath));
+        Comparator.comparing(URL::toString));
   }
 
   /**
@@ -152,74 +113,6 @@ public class TestUtil {
    */
   public static URL getResourceUrl(final String resourcePath) {
     return ClassLoader.class.getResource(resourcePath);
-  }
-
-  /**
-   * Generates a custom HTML document for testing purposes and gets its {@link URL}.
-   *
-   * @param file the file where to store the generated HTML document, cannot be {@code null}
-   * @param base {@code href} value of the {@code <base>} tag, cannot be {@code null}
-   * @param icon {@code href} value of the {@code <link>} tag with {@code rel} value {@code icon},
-   *       an empty {@link String} generates a document without the associated {@code link} tag
-   * @param shortcut {@code href} value of the {@code <link>} tag with {@code rel} value {@code
-   *        shortcut icon}, an empty {@link String} generates a document without
-   *        the associated {@code link} tag
-   * @param appleTouch {@code href} value of the {@code <link>} tag with {@code rel} value {@code
-   *        apple-touch-icon}, an empty {@link String} generates a document without
-   *        the associated {@code link} tag
-   * @param appleTouchPrecomposed {@code href} value of the {@code <link>} tag with {@code rel}
-   *        value {@code apple-touch-icon-precomposed}, an empty {@link String} generates a
-   *        document without the associated {@code link} tag
-   * @return the {@link URL} of the generated HTML document
-   * @throws IOException in case of problems generating the html document
-   */
-  public static URL generateCustomHtmlDocument(final File file, final String base,
-      final String icon, final String shortcut,
-      final String appleTouch, final String appleTouchPrecomposed) throws IOException {
-    final InputStream inputStream = getResourceStream("/base.html");
-    try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-      try (BufferedWriter stringWriter = new BufferedWriter(new FileWriter(file))) {
-        while (reader.ready()) {
-          final String line = reader.readLine();
-          StringBuilder stringBuilder = new StringBuilder(line);
-          replaceFirstOccurrenceOrEmpty(stringBuilder, BASE_PLACEHOLDER, base);
-          replaceFirstOccurrenceOrEmpty(stringBuilder, ICON_PLACEHOLDER, icon);
-          replaceFirstOccurrenceOrEmpty(stringBuilder, SHORTCUT_ICON_PLACEHOLDER, shortcut);
-          replaceFirstOccurrenceOrEmpty(stringBuilder, APPLE_TOUCH_PLACEHOLDER, appleTouch);
-          replaceFirstOccurrenceOrEmpty(stringBuilder, APPLE_TOUCH_PRECOMPOSED_PLACEHOLDER,
-              appleTouchPrecomposed);
-          stringWriter.write(stringBuilder.toString() + "\n");
-        }
-      }
-    }
-    return file.toURI().toURL();
-  }
-
-  /**
-   * Executes an in-place replacement of the first appearance of a given substring inside
-   * the given {@link StringBuilder}. If the input {@code replacement} is empty and a match is found
-   * the input stringbuilder is emptied.
-   *
-   * @param stringBuilder the {@link StringBuilder}
-   * @param toReplace the substring to replace
-   * @param replacement the replacement
-   *
-   */
-  private static void replaceFirstOccurrenceOrEmpty(final StringBuilder stringBuilder,
-      final String toReplace,
-      final String replacement) {
-    if (stringBuilder.length() == 0) {
-      return;
-    }
-    final Pattern pattern = Pattern.compile(Pattern.quote(toReplace));
-    final Matcher matcher = pattern.matcher(stringBuilder);
-    if (matcher.find()) {
-      if (replacement.isEmpty()) {
-        stringBuilder.setLength(0);
-      } else {
-        stringBuilder.replace(matcher.start(), matcher.end(), replacement);
-      }
-    }
   }
 
 }

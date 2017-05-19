@@ -1,12 +1,14 @@
 package ch.bisi.jicon;
 
 import static ch.bisi.jicon.TestUtil.assertIsW3SchoolsIco;
-import static ch.bisi.jicon.TestUtil.generateCustomHtmlDocument;
 import static ch.bisi.jicon.TestUtil.getResourceUrl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import ch.bisi.jicon.common.ImageFormatNotSupportedException;
 import ch.bisi.jicon.common.JiconIcon;
+import ch.bisi.jicon.common.JiconIconFactory;
+import ch.bisi.jicon.fetcher.icon.IconsFetcher;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -16,7 +18,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.util.List;
+import java.util.stream.Stream;
 import javax.imageio.ImageIO;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -30,18 +34,32 @@ public class JiconTest {
   @Rule
   public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
+  private URL w3SchoolsUrl;
+
+  /** The public API under test. **/
+  public Jicon jicon;
+
+  /** Initialization executed before each test. **/
+  @Before
+  public void setUp() throws IOException, ImageFormatNotSupportedException {
+    w3SchoolsUrl = new URL("https://www.w3schools.com/");
+    final JiconIcon w3SchoolsIcon = JiconIconFactory.getIcon(getResourceUrl("/w3_schools.ico"));
+    final IconsFetcher iconsFetcher = () -> Stream.of(w3SchoolsIcon);
+    jicon = new Jicon((url) -> iconsFetcher);
+  }
+
   @Test
   public void retrieveAll() throws Exception {
-    final List<JiconIcon> retrievedIcons = getW3SchoolsIco();
+    final List<JiconIcon> retrievedIcons = jicon
+        .retrieveAll(w3SchoolsUrl);
     assertEquals(1, retrievedIcons.size());
     assertIsW3SchoolsIco(retrievedIcons.get(0));
   }
 
   @Test
   public void getLetterIcon() throws Exception {
-    final URL localW3SchoolsUrl = getLocalW3SchoolsSiteUrl();
-    final BufferedImage retrievedLetterIcon = Jicon
-        .getLetterIcon(localW3SchoolsUrl, Color.RED, 400);
+    final BufferedImage retrievedLetterIcon = jicon
+        .getLetterIcon(w3SchoolsUrl, Color.RED, 100);
     final File retrievedLetterIconFile = temporaryFolder.newFile();
     ImageIO.write(retrievedLetterIcon, "png", retrievedLetterIconFile);
     final MessageDigest messageDigest = MessageDigest.getInstance("MD5");
@@ -49,16 +67,17 @@ public class JiconTest {
         .digest(Files.readAllBytes(Paths.get(retrievedLetterIconFile.toURI())));
     final byte[] correctLetterIconDigest = messageDigest
         .digest(Files
-            .readAllBytes(Paths.get(getResourceUrl("/local_w3schools_lettericon.png").toURI())));
+            .readAllBytes(Paths.get(getResourceUrl("/w3schools_lettericon.png").toURI())));
     assertEquals(toHexString(correctLetterIconDigest),
         toHexString(retrievedLetterIconDigest));
   }
 
   @Test
   public void saveEachEmbeddedImageInDir() throws Exception {
-    final List<JiconIcon> retrievedIcons = getW3SchoolsIco();
+    final List<JiconIcon> retrievedIcons = jicon
+        .retrieveAll(w3SchoolsUrl);
     final File retrievedIconsFolder = temporaryFolder.newFolder();
-    Jicon.saveEachEmbeddedImageInDir(retrievedIcons, retrievedIconsFolder.getAbsolutePath());
+    jicon.saveEachEmbeddedImageInDir(retrievedIcons, retrievedIconsFolder.getAbsolutePath());
     assertTrue(new File(retrievedIconsFolder, "0_0_w3_schools.png").exists());
     assertTrue(new File(retrievedIconsFolder, "0_1_w3_schools.png").exists());
     assertTrue(new File(retrievedIconsFolder, "0_2_w3_schools.png").exists());
@@ -67,25 +86,16 @@ public class JiconTest {
 
   @Test
   public void saveInDir() throws Exception {
-    final List<JiconIcon> retrievedIcons = getW3SchoolsIco();
+    final List<JiconIcon> retrievedIcons = jicon
+        .retrieveAll(w3SchoolsUrl);
     final File retrievedIconsFolder = temporaryFolder.newFolder();
-    Jicon.saveInDir(retrievedIcons, retrievedIconsFolder.toString());
+    jicon.saveInDir(retrievedIcons, retrievedIconsFolder.toString());
     final File retrievedIcon = new File(retrievedIconsFolder, "0_w3_schools.ico");
     final MessageDigest messageDigest = MessageDigest.getInstance("MD5");
     final byte[] digest = messageDigest
         .digest(Files.readAllBytes(Paths.get(retrievedIcon.toURI())));
     assertEquals("4d1579370a6dc54ccb9677e3c5924bbe",
         toHexString(digest));
-  }
-
-  private List<JiconIcon> getW3SchoolsIco() throws IOException {
-    return Jicon.retrieveAll(getLocalW3SchoolsSiteUrl());
-  }
-
-  private URL getLocalW3SchoolsSiteUrl() throws IOException {
-    return generateCustomHtmlDocument(temporaryFolder.newFile(),
-        getResourceUrl("/").toString(),
-        getResourceUrl("/w3_schools.ico").toString(), "", "", "");
   }
 
   /**

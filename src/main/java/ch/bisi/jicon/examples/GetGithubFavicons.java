@@ -14,8 +14,9 @@ import java.util.List;
 public class GetGithubFavicons {
 
   public static void main(final String[] args) throws IOException {
-    final List<JiconIcon> githubFavicons = Jicon.retrieveAll(new URL("https://www.github.com"));
-    Jicon.saveInDir(githubFavicons, "/home/osboxes/github_favicons/");
+    final Jicon jicon = new Jicon();
+    final List<JiconIcon> githubFavicons = jicon.retrieveAll(new URL("https://www.github.com"));
+    jicon.saveInDir(githubFavicons, "/home/osboxes/github_favicons/");
   }
 
 }

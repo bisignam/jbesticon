@@ -2,22 +2,18 @@ package ch.bisi.jicon.common;
 
 import static ch.bisi.jicon.common.Util.replaceExtension;
 
-import ch.bisi.jicon.ColorUtil;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.font.TextAttribute;
 import java.awt.geom.Ellipse2D;
-import java.text.AttributedString;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.text.AttributedString;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -25,6 +21,8 @@ import java.util.Optional;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility class for reading and writing {@link Image}s.
@@ -47,28 +45,40 @@ public class ImageUtil {
    */
   public static BufferedImage createLetterIcon(final Color backgroundColor, final char letter,
       final Integer size) {
-    final float fontSizeFactor = 0.6880340f;
-    final float yOffsetFactor = 102.0f / 1024.0f;
-    final String letterToWrite = Character.toString(Character.toUpperCase(letter));
     final BufferedImage image = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
     final Graphics2D graphics = image.createGraphics();
     graphics.setColor(backgroundColor);
     graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
         RenderingHints.VALUE_ANTIALIAS_ON);
     graphics.fill(new Ellipse2D.Float(0, 0, size, size));
-    final float fontSize = fontSizeFactor * (float) size;
+    writeLetter(letter, size, graphics);
+    graphics.dispose();
+    return image;
+  }
+
+  /**
+   * Writes a letter on the given {@link Graphics2D}.
+   *
+   * @param letter the letter to write
+   * @param size the size of the {@link Graphics2D}
+   * @param graphics the {@link Graphics2D} on which to write the letter
+   */
+  private static void writeLetter(final char letter, final Integer size,
+      final Graphics2D graphics) {
+    final float fontSize = 0.6880340f * (float) size;
     final Font font = new Font("Arial", Font.PLAIN, size).deriveFont(fontSize);
     graphics.setFont(font);
+    final String letterToWrite = Character.toString(Character.toUpperCase(letter));
     final AttributedString stringToWrite = new AttributedString(letterToWrite);
     stringToWrite.addAttribute(TextAttribute.FONT, font);
     stringToWrite
-        .addAttribute(TextAttribute.FOREGROUND, ColorUtil.getForegroundColor(backgroundColor));
-    final int xPosition =
+        .addAttribute(TextAttribute.FOREGROUND,
+            ColorUtil.getForegroundColor(graphics.getColor()));
+    final int letterXPosition =
         (size - graphics.getFontMetrics().stringWidth(letterToWrite)) / 2;
-    final int yPosition = (int) (yOffsetFactor * (float) (size)) + (int) Math.ceil(fontSize);
-    graphics.drawString(stringToWrite.getIterator(), xPosition, yPosition);
-    graphics.dispose();
-    return image;
+    final float yOffsetFactor = 102.0f / 1024.0f;
+    final int letterYPosition = (int) (yOffsetFactor * (float) (size)) + (int) Math.ceil(fontSize);
+    graphics.drawString(stringToWrite.getIterator(), letterXPosition, letterYPosition);
   }
 
   /**
@@ -83,8 +93,8 @@ public class ImageUtil {
    * @return a {@link List} of {@link T}s containing each result returned by the executed operations
    * @throws ImageFormatNotSupportedException if no registered {@link ImageReader} has been found
    *         for the image at the given {@link URL}
-   * @throws IOException if an error occurs retrieving the {@link ImageReader}
-   *         or executing the input {@code operation}.
+   * @throws IOException if an error occurs retrieving the {@link ImageReader} or executing the
+   *         input {@code operation}.
    */
   public static <T> List<T> executeOperationForEachEmbeddedImage(final URL imageUrl,
       final ThrowableBiFunction<ImageReader, Integer, T, IOException> operation)
@@ -115,14 +125,13 @@ public class ImageUtil {
    *
    * @param images the {@link List} of {@link BufferedImage}s to save
    * @param imagesFormats the {@link List} of formats for each input {@link BufferedImage}
-   * @param outputFilesPaths the {@link List} of paths where to store each
-   *        input {@link BufferedImage}
-   *
+   * @param outputFilesPaths the {@link List} of paths where to store each input {@link
+   * BufferedImage}
    * @throws IOException in case of problems writing the images to files
    */
   public static void writeImagesToFiles(final List<BufferedImage> images,
-                                        final List<String> imagesFormats,
-                                        final List<String> outputFilesPaths) throws IOException {
+      final List<String> imagesFormats,
+      final List<String> outputFilesPaths) throws IOException {
     if (!(outputFilesPaths.size() == imagesFormats.size()
         && imagesFormats.size() == images.size())) {
       throw new IllegalArgumentException(

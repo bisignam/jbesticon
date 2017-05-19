@@ -1,4 +1,4 @@
-package ch.bisi.jicon;
+package ch.bisi.jicon.common;
 
 import java.awt.Color;
 

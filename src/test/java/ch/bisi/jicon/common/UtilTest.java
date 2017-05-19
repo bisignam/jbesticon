@@ -2,10 +2,9 @@ package ch.bisi.jicon.common;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Test;
-
 import java.net.MalformedURLException;
 import java.net.URL;
+import org.junit.Test;
 
 
 /**
